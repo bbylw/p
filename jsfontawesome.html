@@ -1,0 +1,1301 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>WebNav Hub</title>
+  <style>
+    :root {
+      --primary-color: #ff9000;
+      --bg-color: #0d0d0d;
+      --card-bg-color: #1a1a1a;
+      --text-color: #fff;
+    }
+
+    html {
+      font-size: 16px;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      line-height: 1.6;
+    }
+
+    header {
+      background-color: #000;
+      padding: 1rem;
+      text-align: center;
+    }
+
+    header h1 {
+      font-size: 2rem;
+      font-weight: bold;
+      color: var(--primary-color);
+      margin: 0;
+      text-transform: uppercase;
+    }
+
+    nav {
+      background-color: var(--card-bg-color);
+      padding: 0.5rem;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    nav ul {
+      list-style-type: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    nav li {
+      margin: 0.3rem;
+    }
+
+    nav a {
+      color: var(--text-color);
+      text-decoration: none;
+      font-size: 1rem;
+      font-weight: bold;
+      padding: 0.5rem 0.8rem;
+      border-radius: 1.25rem;
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    nav a:hover,
+    nav a.active {
+      background-color: var(--primary-color);
+      color: #000;
+    }
+
+    main {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 1rem;
+    }
+
+    .category-title {
+      font-size: 1.5rem;
+      font-weight: bold;
+      margin: 2rem 0 1rem;
+      color: var(--primary-color);
+      border-left: 4px solid var(--primary-color);
+      padding-left: 0.6rem;
+      text-transform: uppercase;
+    }
+
+    .link-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(8rem, 1fr));
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .link-card {
+      background-color: var(--card-bg-color);
+      border-radius: 8px;
+      padding: 1.2rem 0.8rem;
+      text-align: center;
+      transition: transform 0.2s ease-out;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 90px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .link-card a {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      text-decoration: none;
+      z-index: 12;
+      display: block;
+    }
+
+    .link-card:hover {
+      background-color: #2a2a2a;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    .link-card i {
+      font-size: 1.8rem;
+      margin-bottom: 0.7rem;
+      color: var(--primary-color);
+      transition: transform 0.2s ease;
+      position: relative;
+      z-index: 11;
+    }
+
+    .link-card:hover i {
+      transform: scale(1.1);
+    }
+
+    .link-card h3 {
+      font-size: 0.9rem;
+      margin: 0;
+      color: var(--text-color);
+      line-height: 1.3;
+      font-weight: 500;
+      max-width: 100%;
+      height: 2.6em;
+      overflow: hidden;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      line-clamp: 2;
+      -webkit-box-orient: vertical;
+      text-overflow: ellipsis;
+      white-space: normal;
+      padding: 0 0.3rem;
+      position: relative;
+      z-index: 11;
+    }
+
+    footer {
+      background-color: #000;
+      color: #ccc;
+      text-align: center;
+      padding: 1rem;
+      font-size: 0.75rem;
+    }
+
+    footer nav {
+      margin-top: 0.6rem;
+      background-color: transparent;
+    }
+
+    footer nav a {
+      color: #ccc;
+      margin: 0 0.6rem;
+      font-size: 0.75rem;
+    }
+
+    @media (max-width: 1200px) {
+      main {
+        padding: 1rem;
+        max-width: 95%;
+      }
+
+      .link-grid {
+        grid-template-columns: repeat(auto-fill, minmax(8rem, 1fr));
+        gap: 1rem;
+      }
+    }
+
+    @media (max-width: 768px) {
+      html {
+        font-size: 15px;
+      }
+
+      main {
+        padding: 0.8rem;
+      }
+
+      .link-grid {
+        grid-template-columns: repeat(auto-fill, minmax(7rem, 1fr));
+        gap: 0.8rem;
+      }
+
+      nav {
+        padding: 0.4rem;
+      }
+
+      nav a {
+        padding: 0.4rem 0.7rem;
+        font-size: 0.95rem;
+      }
+
+      .category-title {
+        font-size: 1.4rem;
+        margin: 1.8rem 0 1rem;
+      }
+
+      .link-card {
+        padding: 1rem 0.6rem;
+        min-height: 80px;
+      }
+
+      .link-card i {
+        font-size: 1.6rem;
+        margin-bottom: 0.5rem;
+      }
+
+      .link-card h3 {
+        font-size: 0.8rem;
+        height: 2.4em;
+      }
+    }
+
+    @media (max-width: 480px) {
+      html {
+        font-size: 14px;
+      }
+
+      main {
+        padding: 0.6rem;
+      }
+
+      .link-grid {
+        grid-template-columns: repeat(auto-fill, minmax(6rem, 1fr));
+        gap: 0.7rem;
+      }
+
+      header h1 {
+        font-size: 1.6rem;
+      }
+
+      nav li {
+        margin: 0.25rem;
+      }
+
+      nav a {
+        padding: 0.35rem 0.6rem;
+        font-size: 0.9rem;
+      }
+
+      .category-title {
+        font-size: 1.4rem;
+        margin: 1.8rem 0 1rem;
+      }
+
+      .link-card {
+        padding: 0.8rem 0.5rem;
+        min-height: 70px;
+      }
+
+      .link-card i {
+        font-size: 1.4rem;
+        margin-bottom: 0.4rem;
+      }
+
+      .link-card h3 {
+        font-size: 0.75rem;
+        padding: 0 0.2rem;
+        height: 2.4em;
+      }
+
+      footer {
+        padding: 0.8rem;
+      }
+
+      footer nav a {
+        margin: 0 0.4rem;
+        font-size: 0.7rem;
+      }
+    }
+
+    @media (max-width: 360px) {
+      html {
+        font-size: 13px;
+      }
+
+      .link-grid {
+        grid-template-columns: repeat(auto-fill, minmax(5.5rem, 1fr));
+        gap: 0.6rem;
+      }
+
+      header h1 {
+        font-size: 1.4rem;
+      }
+
+      .link-card {
+        padding: 0.8rem 0.5rem;
+        min-height: 70px;
+      }
+
+      .link-card i {
+        font-size: 1.3rem;
+        margin-bottom: 0.3rem;
+      }
+
+      .link-card h3 {
+        font-size: 0.7rem;
+        padding: 0 0.15rem;
+        height: 2.2em;
+      }
+    }
+  </style>
+  <!-- Upgraded to jsDelivr Font Awesome 7.1.0 -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.1.0/css/all.min.css" />
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      var navLinks = document.querySelectorAll("nav a");
+
+      navLinks.forEach(function (link) {
+        link.addEventListener("click", function (e) {
+          e.preventDefault();
+          navLinks.forEach((l) => l.classList.remove("active"));
+          this.classList.add("active");
+          var targetId = this.getAttribute("href").split("#")[1];
+          var targetElement = document.getElementById(targetId);
+          if (targetElement) {
+            targetElement.scrollIntoView({ behavior: "smooth" });
+
+            var newUrl =
+              window.location.protocol +
+              "//" +
+              window.location.host +
+              window.location.pathname +
+              "#" +
+              targetId;
+            window.history.pushState({ path: newUrl }, "", newUrl);
+          }
+        });
+      });
+
+      function handleHashChange() {
+        var hash = window.location.hash;
+        if (hash) {
+          var targetElement = document.getElementById(hash.substring(1));
+          if (targetElement) {
+            targetElement.scrollIntoView({ behavior: "smooth" });
+            var activeLink = document.querySelector(
+              'nav a[href="' + hash + '"]'
+            );
+            if (activeLink) {
+              navLinks.forEach((l) => l.classList.remove("active"));
+              activeLink.classList.add("active");
+            }
+          }
+        }
+      }
+
+      window.addEventListener("hashchange", handleHashChange);
+      handleHashChange(); // Call on initial load
+    });
+  </script>
+</head>
+
+<body>
+  <header>
+    <h1>WebNav Hub</h1>
+  </header>
+  <nav>
+    <ul>
+      <li><a href="#ai-search">Ai搜索</a></li>
+      <li><a href="#social">社交媒体</a></li>
+      <li><a href="#tools">实用工具</a></li>
+      <li><a href="#tech-news">科技资讯</a></li>
+      <li><a href="#cloud-storage">云存储</a></li>
+      <li><a href="#email">电子邮箱</a></li>
+    </ul>
+  </nav>
+  <main>
+    <h2 class="category-title" id="ai-search">Ai搜索</h2>
+    <section class="link-grid">
+      <div class="link-card">
+        <a href="https://www.google.com" target="_blank"></a>
+        <i class="fa-brands fa-google"></i>
+        <h3>Google</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://unlimitedai.chat/" target="_blank"></a>
+        <i class="fa-solid fa-pepper-hot"></i>
+        <h3>无限制AI</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://openrouter.ai/" target="_blank"></a>
+        <i class="fa-brands fa-openid"></i>
+        <h3>openrouter</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://websim.ai/" target="_blank"></a>
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <h3>websim</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://chatgpt.com/" target="_blank"></a>
+        <i class="fa-brands fa-google"></i>
+        <h3>chatgpt</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://www.doubao.com/chat/" target="_blank"></a>
+        <i class="fa-solid fa-paw"></i>
+        <h3>傻豆包</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://space.coze.cn/" target="_blank"></a>
+        <i class="fa-solid fa-shuttle-space"></i>
+        <h3>扣子空间</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://chat.qwen.ai/" target="_blank"></a>
+        <i class="fa-brands fa-rocketchat"></i>
+        <h3>通义千问</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://kimi.moonshot.cn/" target="_blank"></a>
+        <i class="fa-regular fa-moon"></i>
+        <h3>kimi</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://yiyan.baidu.com/" target="_blank"></a>
+        <i class="fa-solid fa-dumpster-fire"></i>
+        <h3>文心一言</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://yuanbao.tencent.com/" target="_blank"></a>
+        <i class="fa-solid fa-robot"></i>
+        <h3>腾讯元宝</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://www.minimax.io/" target="_blank"></a>
+        <i class="fa-solid fa-minimize"></i>
+        <h3>minimax</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://chat.z.ai/" target="_blank"></a>
+        <i class="fa-solid fa-z"></i>
+        <h3>z.ai</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://aistudio.google.com/" target="_blank"></a>
+        <i class="fa-solid fa-robot"></i>
+        <h3>google AIstudio</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://gemini.google.com/" target="_blank"></a>
+        <i class="fa-brands fa-google-plus"></i>
+        <h3>gemini</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://labs.google/fx/zh" target="_blank"></a>
+        <i class="fa-brands fa-google-plus"></i>
+        <h3>labs.google</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://jules.google.com/" target="_blank"></a>
+        <i class="fa-brands fa-google-plus"></i>
+        <h3>jules.google</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://copilot.microsoft.com/" target="_blank"></a>
+        <i class="fa-brands fa-windows"></i>
+        <h3>copilot</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://build.nvidia.com/" target="_blank"></a>
+        <i class="fa-solid fa-microchip"></i>
+        <h3>nvidia</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://claude.ai/" target="_blank"></a>
+        <i class="fa-solid fa-robot"></i>
+        <h3>claude</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://chat.chutes.ai/" target="_blank"></a>
+        <i class="fa-solid fa-robot"></i>
+        <h3>chutesai</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://mistral.ai/" target="_blank"></a>
+        <i class="fa-solid fa-brain"></i>
+        <h3>mistral</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://groq.com/" target="_blank"></a>
+        <i class="fa-solid fa-group-arrows-rotate"></i>
+        <h3>groq</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://www.medscape.com/" target="_blank"></a>
+        <i class="fa-solid fa-stethoscope"></i>
+        <h3>medscape</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://heck.ai/" target="_blank"></a>
+        <i class="fa-brands fa-rocketchat"></i>
+        <h3>heck.ai</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://www.wenxiaobai.com/" target="_blank"></a>
+        <i class="fa-solid fa-mask"></i>
+        <h3>问小白</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://chutes.ai/" target="_blank"></a>
+        <i class="fa-solid fa-chalkboard"></i>
+        <h3>chutes.ai</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://huggingface.co/" target="_blank"></a>
+        <i class="fa-solid fa-face-rolling-eyes"></i>
+        <h3>huggingface</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://lmarena.ai/" target="_blank"></a>
+        <i class="fa-solid fa-robot"></i>
+        <h3>lmarena</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://anyrouter.top/" target="_blank"></a>
+        <i class="fa-solid fa-robot"></i>
+        <h3>anyrouter</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://api.codemirror.codes/" target="_blank"></a>
+        <i class="fa-brands fa-codepen"></i>
+        <h3>codemirror</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://x.ai/" target="_blank"></a>
+        <i class="fa-brands fa-x-twitter"></i>
+        <h3>x.ai</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://ascvdpce.186404.xyz/" target="_blank"></a>
+        <i class="fa-solid fa-heart-pulse"></i>
+        <h3>pce计算</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://t3.chat/" target="_blank"></a>
+        <i class="fa-brands fa-rocketchat"></i>
+        <h3>t3.chat</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://v0.dev/" target="_blank"></a>
+        <i class="fa-solid fa-v"></i>
+        <h3>v0</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://cto.new/" target="_blank"></a>
+        <i class="fa-solid fa-v"></i>
+        <h3>cto.new</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://www.deepseek.com/" target="_blank"></a>
+        <i class="fa-brands fa-rocketchat"></i>
+        <h3>deepseek</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://ai.dangbei.com/" target="_blank"></a>
+        <i class="fa-brands fa-rocketchat"></i>
+        <h3>当贝AI</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://www.genspark.ai/" target="_blank"></a>
+        <i class="fa-brands fa-rocketchat"></i>
+        <h3>genspark.ai</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://firebase.google.com/" target="_blank"></a>
+        <i class="fa-solid fa-code-branch"></i>
+        <h3>firebase.google</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://kiro.dev/" target="_blank"></a>
+        <i class="fa-solid fa-code"></i>
+        <h3>kiro.dev</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://cli.iflow.cn/" target="_blank"></a>
+        <i class="fa-solid fa-code"></i>
+        <h3>iflow</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://www.streamlake.ai/" target="_blank"></a>
+        <i class="fa-solid fa-code"></i>
+        <h3>streamlake.ai</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://www.codebuff.com/" target="_blank"></a>
+        <i class="fa-solid fa-robot"></i>
+        <h3>codebuff</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://ampcode.com/" target="_blank"></a>
+        <i class="fa-solid fa-code"></i>
+        <h3>ampcode</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://siliconflow.cn/" target="_blank"></a>
+        <i class="fa-brands fa-confluence"></i>
+        <h3>硅基流动</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://www.modelscope.cn/" target="_blank"></a>
+        <i class="fa-solid fa-code-branch"></i>
+        <h3>魔塔社区</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://readdy.ai/" target="_blank"></a>
+        <i class="fa-solid fa-bolt"></i>
+        <h3>readdy</h3>
+      </div>
+      </div>
+      <div class="link-card">
+        <a href="https://youmind.com/" target="_blank"></a>
+        <i class="fa-solid fa-camera"></i>
+        <h3>youmind</h3>
+      </div>
+      </div>
+      <div class="link-card">
+        <a href="https://www.lovart.ai/zh-CN" target="_blank"></a>
+        <i class="fa-solid fa-file-image"></i>
+        <h3>lovart</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://bolt.new/" target="_blank"></a>
+        <i class="fa-solid fa-bolt"></i>
+        <h3>bolt.new</h3>
+      </div>
+    </section>
+
+    <h2 class="category-title" id="social">社交媒体</h2>
+    <section class="link-grid">
+      <div class="link-card">
+        <a href="https://www.facebook.com" target="_blank"></a>
+        <i class="fa-brands fa-facebook"></i>
+        <h3>Facebook</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://x.com/" target="_blank"></a>
+        <i class="fa-brands fa-twitter"></i>
+        <h3>Twitter</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://twitterxz.com/" target="_blank"></a>
+        <i class="fa-brands fa-x-twitter"></i>
+        <h3>推特视频下载</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://www.instagram.com" target="_blank"></a>
+        <i class="fa-brands fa-instagram"></i>
+        <h3>Instagram</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://render.com/" target="_blank"></a>
+        <i class="fa-solid fa-draw-polygon"></i>
+        <h3>render</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://deno.com/deploy" target="_blank"></a>
+        <i class="fa-solid fa-d"></i>
+        <h3>deno</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://railway.com/" target="_blank"></a>
+        <i class="fa-solid fa-archway"></i>
+        <h3>railway</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://vercel.com/" target="_blank"></a>
+        <i class="fa-solid fa-v"></i>
+        <h3>vercel</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://www.netlify.com/" target="_blank"></a>
+        <i class="fa-brands fa-n"></i>
+        <h3>netlify</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://zh.savefrom.net/" target="_blank"></a>
+        <i class="fa-solid fa-share-from-square"></i>
+        <h3>savefrom</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://goingbus.com/" target="_blank"></a>
+        <i class="fa-brands fa-n"></i>
+        <h3>爆米花视频</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://www.reddit.com" target="_blank"></a>
+        <i class="fa-brands fa-reddit"></i>
+        <h3>Reddit</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://www.downloadyoutubesubtitles.com/" target="_blank"></a>
+        <i class="fa-brands fa-youtube"></i>
+        <h3>油管字幕下载</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://github.com/" target="_blank"></a>
+        <i class="fa-brands fa-github"></i>
+        <h3>GitHub</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://www.y2mate.com/" target="_blank"></a>
+        <i class="fa-solid fa-download"></i>
+        <h3>油管视频下载</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://youtube.iiilab.com/" target="_blank"></a>
+        <i class="fa-solid fa-download"></i>
+        <h3>视频下载</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://suno.com/" target="_blank"></a>
+        <i class="fa-solid fa-music"></i>
+        <h3>suno</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://mv.186404.xyz/" target="_blank"></a>
+        <i class="fa-solid fa-tv"></i>
+        <h3>电影导航</h3>
+      </div>
+    </section>
+
+    <h2 class="category-title" id="tools">实用工具</h2>
+    <section class="link-grid">
+      <div class="link-card">
+        <a href="https://translate.google.com" target="_blank"></a>
+        <i class="fa-solid fa-language"></i>
+        <h3>Google翻译</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://d.186404.xyz/" target="_blank"></a>
+        <i class="fa-solid fa-link"></i>
+        <h3>短链</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://dynv6.com/" target="_blank"></a>
+        <i class="fa-solid fa-network-wired"></i>
+        <h3>dynv6</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://fast.com/" target="_blank"></a>
+        <i class="fa-solid fa-gauge-high"></i>
+        <h3>网速测试</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://www.cloudns.net/" target="_blank"></a>
+        <i class="fa-solid fa-cloud"></i>
+        <h3>Cloudns</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://www.cloudflare.com/zh-cn/" target="_blank"></a>
+        <i class="fa-solid fa-shield-halved"></i>
+        <h3>Cloudflare</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://ygpy.net/" target="_blank"></a>
+        <i class="fa-solid fa-user-group"></i>
+        <h3>一个朋友</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://notebooklm.google/" target="_blank"></a>
+        <i class="fa-solid fa-book"></i>
+        <h3>谷歌笔记</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://email.ml/" target="_blank"></a>
+        <i class="fa-solid fa-envelope"></i>
+        <h3>临时邮箱</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://www.ahhhhfs.com/" target="_blank"></a>
+        <i class="fa-solid fa-blog"></i>
+        <h3>A姐</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://ip.sb/" target="_blank"></a>
+        <i class="fa-solid fa-location-dot"></i>
+        <h3>IP查询</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://dns.he.net/" target="_blank"></a>
+        <i class="fa-solid fa-network-wired"></i>
+        <h3>dns.he域名托管</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://www.site.ac/" target="_blank"></a>
+        <i class="fa-solid fa-right-left"></i>
+        <h3>Site域名转发</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://zh.go-to-library.sk/" target="_blank"></a>
+        <i class="fa-solid fa-book-reader"></i>
+        <h3>Z-Library</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://domain.digitalplat.org/" target="_blank"></a>
+        <i class="fa-solid fa-globe"></i>
+        <h3>us.kg域名</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://www.spaceship.com/zh/" target="_blank"></a>
+        <i class="fa-solid fa-rocket"></i>
+        <h3>Spaceship廉价域名</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://www.namecheap.com/" target="_blank"></a>
+        <i class="fa-solid fa-rocket"></i>
+        <h3>namecheap廉价域名</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://www.cursor.com/" target="_blank"></a>
+        <i class="fa-solid fa-i-cursor"></i>
+        <h3>cursor</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://fontawesome.com/" target="_blank"></a>
+        <i class="fa-solid fa-icons"></i>
+        <h3>FontAwesome图标</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://worldvectorlogo.com/" target="_blank"></a>
+        <i class="fa-regular fa-font-awesome"></i>
+        <h3>logosvg</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://scamalytics.com/" target="_blank"></a>
+        <i class="fa-solid fa-icons"></i>
+        <h3>ip清洁度查询</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://test-ipv6.com/" target="_blank"></a>
+        <i class="fa-solid fa-ethernet"></i>
+        <h3>test-ipv6</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://html.zone/ip" target="_blank"></a>
+        <i class="fa-brands fa-sourcetree"></i>
+        <h3>zone/ip</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://www.lumiproxy.com/zh-hans/online-proxy/proxysite/" target="_blank"></a>
+        <i class="fa-solid fa-unlock"></i>
+        <h3>免费网络代理</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://ipcheck.ing/" target="_blank"></a>
+        <i class="fa-solid fa-location-dot"></i>
+        <h3>ipcheck</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://console.cron-job.org/" target="_blank"></a>
+        <i class="fa-solid fa-ethernet"></i>
+        <h3>定时任务cron-job</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://uptimerobot.com/" target="_blank"></a>
+        <i class="fa-solid fa-location-dot"></i>
+        <h3>uptimerobot</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://forwardemail.net/" target="_blank"></a>
+        <i class="fa-solid fa-envelopes-bulk"></i>
+        <h3>forwardemail</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://improvmx.com/" target="_blank"></a>
+        <i class="fa-solid fa-envelopes-bulk"></i>
+        <h3>improvmx</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://gb.w404.nyc.mn/" target="_blank"></a>
+        <i class="fa-brands fa-github"></i>
+        <h3>github文件加速</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://hostry.com/" target="_blank"></a>
+        <i class="fa-solid fa-clock-rotate-left"></i>
+        <h3>hostryDNS域名托管</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://www.sitelutions.com/" target="_blank"></a>
+        <i class="fa-solid fa-sitemap"></i>
+        <h3>免费域名sitelutions</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://www.changeip.com/" target="_blank"></a>
+        <i class="fa-solid fa-satellite-dish"></i>
+        <h3>免费域名changeip</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://dnsexit.com/" target="_blank"></a>
+        <i class="fa-solid fa-users"></i>
+        <h3>免费域名dnsexit</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://www.gname.vip/" target="_blank"></a>
+        <i class="fa-solid fa-users"></i>
+        <h3>免费域名gname</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://www.nslookup.io/" target="_blank"></a>
+        <i class="fa-solid fa-arrows-rotate"></i>
+        <h3>DNS查找nslookup</h3>
+      </div>
+
+      <div class="link-card">
+        <a href="https://ping0.cc/" target="_blank"></a>
+        <i class="fa-solid fa-fingerprint"></i>
+        <h3>ping0</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://customer.l53.net/" target="_blank"></a>
+        <i class="fa-solid fa-fingerprint"></i>
+        <h3>L53免费域名</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://tools.pdf24.org/" target="_blank"></a>
+        <i class="fa-solid fa-file-pdf"></i>
+        <h3>PDF在线工具</h3>
+      </div>
+      <div class="link-card">
+        <a href="http://free-proxy.cz/en/" target="_blank"></a>
+        <i class="fa-brands fa-internet-explorer"></i>
+        <h3>free-proxy</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://www.croxyproxy.rocks/_zh/" target="_blank"></a>
+        <i class="fa-solid fa-unlock"></i>
+        <h3>在线代理croxyproxy</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://doocs.github.io/md/" target="_blank"></a>
+        <i class="fa-regular fa-edit"></i>
+        <h3>微信Markdown编辑器</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://www.proxysite.com/" target="_blank"></a>
+        <i class="fa-solid fa-unlock"></i>
+        <h3>proxysite</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://www.serv00.com/" target="_blank"></a>
+        <i class="fa-solid fa-server"></i>
+        <h3>serv00</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://www.hostuno.com/" target="_blank"></a>
+        <i class="fa-solid fa-server"></i>
+        <h3>hostuno</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://github.com/Molunerfinn/PicGo" target="_blank"></a>
+        <i class="fa-solid fa-cloud-arrow-up"></i>
+        <h3>PicGo</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://smms.app/" target="_blank"></a>
+        <i class="fa-solid fa-image"></i>
+        <h3>SM.MS</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://freeimage.host/" target="_blank"></a>
+        <i class="fa-solid fa-photo-film"></i>
+        <h3>FreeImageHost</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://cobalt.tools/" target="_blank"></a>
+        <i class="fa-brands fa-youtube"></i>
+        <h3>cobalt</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://codeium.com/" target="_blank"></a>
+        <i class="fa-solid fa-code"></i>
+        <h3>Windsurf</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://tinywow.com/" target="_blank"></a>
+        <i class="fa-brands fa-free-code-camp"></i>
+        <h3>tinywow</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://paywallbuster.com/" target="_blank"></a>
+        <i class="fa-solid fa-key"></i>
+        <h3>付费墙</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://g.186404.xyz/wallHub/" target="_blank"></a>
+        <i class="fa-solid fa-unlock"></i>
+        <h3>PaywallHub</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://fmhy.net/" target="_blank"></a>
+        <i class="fa-regular fa-folder-open"></i>
+        <h3>fmhy</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://www.remove.bg/" target="_blank"></a>
+        <i class="fa-solid fa-image-portrait"></i>
+        <h3>remove</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://picwish.com/" target="_blank"></a>
+        <i class="fa-regular fa-image"></i>
+        <h3>picwish</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://zenvideo.qq.com/" target="_blank"></a>
+        <i class="fa-solid fa-video"></i>
+        <h3>腾讯智影</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://www.hidoha.net/" target="_blank"></a>
+        <i class="fa-solid fa-fingerprint"></i>
+        <h3>免费域名HiDNS</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://pixabay.com/" target="_blank"></a>
+        <i class="fa-brands fa-pix"></i>
+        <h3>pixabay</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://www.infinityfree.com/" target="_blank"></a>
+        <i class="fa-solid fa-infinity"></i>
+        <h3>InfinityFree</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://anyvoice.net/" target="_blank"></a>
+        <i class="fa-solid fa-microphone"></i>
+        <h3>anyvoice</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://fish.audio/" target="_blank"></a>
+        <i class="fa-solid fa-fish"></i>
+        <h3>fish.audio</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://noiz.ai/" target="_blank"></a>
+        <i class="fa-solid fa-circle-notch"></i>
+        <h3>noizai</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://hailuoai.video/" target="_blank"></a>
+        <i class="fa-solid fa-file-audio"></i>
+        <h3>海螺Ai</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://desec.io/" target="_blank"></a>
+        <i class="fa-solid fa-anchor"></i>
+        <h3>desec免费域名</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://lovable.dev/" target="_blank"></a>
+        <i class="fa-solid fa-shield-heart"></i>
+        <h3>lovable网站生成</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://www.netlib.re/" target="_blank"></a>
+        <i class="fa-solid fa-globe"></i>
+        <h3>netlib免费域名</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://www.dynu.com/" target="_blank"></a>
+        <i class="fa-solid fa-globe"></i>
+        <h3>dynu免费域名</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://zone.id/" target="_blank"></a>
+        <i class="fa-solid fa-id-card-clip"></i>
+        <h3>zone免费域名</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://my.dnshe.com/" target="_blank"></a>
+        <i class="fa-solid fa-id-card-clip"></i>
+        <h3>dnshe免费域名</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://x10hosting.com/" target="_blank"></a>
+        <i class="fa-solid fa-ghost"></i>
+        <h3>x10hosting免费托管</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://www.nodeloc.com/" target="_blank"></a>
+        <i class="fa-brands fa-hashnode"></i>
+        <h3>nodeloc社区</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://same.new/" target="_blank"></a>
+        <i class="fa-solid fa-copy"></i>
+        <h3>same复制网站</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://claw.cloud/" target="_blank"></a>
+        <i class="fa-solid fa-cloud"></i>
+        <h3>claw容器</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://www.subeasy.ai/zh-CN" target="_blank"></a>
+        <i class="fa-solid fa-closed-captioning"></i>
+        <h3>subeasy字幕</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://cardify.godsbee.com/" target="_blank"></a>
+        <i class="fa-solid fa-credit-card"></i>
+        <h3>知识卡片</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://www.webhostmost.com/" target="_blank"></a>
+        <i class="fa-solid fa-web-awesome"></i>
+        <h3>webhostmost网站托管</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://edgeone.ai/" target="_blank"></a>
+        <i class="fa-brands fa-edge"></i>
+        <h3>edgeone</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://student.frp.gs/" target="_blank"></a>
+        <i class="fa-solid fa-graduation-cap"></i>
+        <h3>student ID</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://www.stormkit.io/" target="_blank"></a>
+        <i class="fa-solid fa-cloud"></i>
+        <h3>Stormkit</h3>
+      </div>
+    </section>
+
+    <h2 class="category-title" id="tech-news">科技资讯</h2>
+    <section class="link-grid">
+      <div class="link-card">
+        <a href="https://www.techcrunch.com" target="_blank"></a>
+        <i class="fa-solid fa-newspaper"></i>
+        <h3>TechCrunch</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://www.wired.com" target="_blank"></a>
+        <i class="fa-solid fa-bolt"></i>
+        <h3>Wired</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://www.theverge.com" target="_blank"></a>
+        <i class="fa-solid fa-laptop"></i>
+        <h3>The Verge</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://arstechnica.com" target="_blank"></a>
+        <i class="fa-solid fa-rocket"></i>
+        <h3>Ars Technica</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://www.engadget.com" target="_blank"></a>
+        <i class="fa-solid fa-mobile-screen"></i>
+        <h3>Engadget</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://scitechdaily.com/" target="_blank"></a>
+        <i class="fa-solid fa-microscope"></i>
+        <h3>科技日报</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://techradar.com" target="_blank"></a>
+        <i class="fa-solid fa-satellite"></i>
+        <h3>TechRadar</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://b.186404.xyz/" target="_blank"></a>
+        <i class="fa-solid fa-blog"></i>
+        <h3>科技博客</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://www.cnbeta.com.tw/" target="_blank"></a>
+        <i class="fa-solid fa-circle-info"></i>
+        <h3>cnbeta</h3>
+      </div>
+    </section>
+
+    <h2 class="category-title" id="cloud-storage">云存储</h2>
+    <section class="link-grid">
+      <div class="link-card">
+        <a href="https://www.dropbox.com" target="_blank"></a>
+        <i class="fa-brands fa-dropbox"></i>
+        <h3>Dropbox</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://drive.google.com" target="_blank"></a>
+        <i class="fa-brands fa-google-drive"></i>
+        <h3>Google Drive</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://onedrive.live.com" target="_blank"></a>
+        <i class="fa-brands fa-microsoft"></i>
+        <h3>OneDrive</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://www.box.com" target="_blank"></a>
+        <i class="fa-solid fa-box"></i>
+        <h3>Box</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://www.mediafire.com" target="_blank"></a>
+        <i class="fa-solid fa-file"></i>
+        <h3>MediaFire</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://mega.nz" target="_blank"></a>
+        <i class="fa-solid fa-cloud-arrow-up"></i>
+        <h3>MEGA</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://mypikpak.com/" target="_blank"></a>
+        <i class="fa-solid fa-cloud"></i>
+        <h3>PikPak</h3>
+      </div>
+    </section>
+
+    <h2 class="category-title" id="email">电子邮箱</h2>
+    <section class="link-grid">
+      <div class="link-card">
+        <a href="https://mail.google.com" target="_blank"></a>
+        <i class="fa-solid fa-envelope"></i>
+        <h3>Gmail</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://outlook.live.com" target="_blank"></a>
+        <i class="fa-brands fa-microsoft"></i>
+        <h3>Outlook</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://cock.li/" target="_blank"></a>
+        <i class="fa-solid fa-envelope-open"></i>
+        <h3>cock邮箱</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://disroot.org/" target="_blank"></a>
+        <i class="fa-solid fa-envelope-circle-check"></i>
+        <h3>disroot邮箱</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://www.protonmail.com" target="_blank"></a>
+        <i class="fa-solid fa-shield-halved"></i>
+        <h3>ProtonMail</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://mail.qq.com" target="_blank"></a>
+        <i class="fa-brands fa-qq"></i>
+        <h3>QQ邮箱</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://librem.one/" target="_blank"></a>
+        <i class="fa-solid fa-at"></i>
+        <h3>librem邮箱</h3>
+      </div>
+      <div class="link-card">
+        <a href="https://edumail.su/" target="_blank"></a>
+        <i class="fa-solid fa-envelopes-bulk"></i>
+        <h3>临时教育邮箱</h3>
+      </div>
+    </section>
+  </main>
+  <footer>
+    <p>© 2025 WebNav Hub. 保留所有权利。</p>
+    <nav>
+      <a href="#">隐私政策</a>
+      <a href="#">使用条款</a>
+      <a href="#">联系我们</a>
+    </nav>
+  </footer>
+</body>
+
+</html>
