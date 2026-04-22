@@ -260,10 +260,10 @@ const DATA = [
     var h = '<h2 class="font-display text-xl sm:text-2xl font-bold mt-8 mb-4 text-primary border-l-4 border-primary pl-3 uppercase tracking-tight" id="'+cat.id+'">'+cat.title+'</h2>';
     h += '<section class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-7 xl:grid-cols-8 gap-2.5 sm:gap-3 mb-8">';
     cat.items.forEach(function(d){
-      h += '<div class="link-card bg-card rounded-xl p-3 sm:p-4 text-center flex flex-col items-center justify-center min-h-[80px] sm:min-h-[90px] relative overflow-hidden cursor-pointer hover:bg-card-hover">'
+      h += '<div class="link-card bg-card rounded-xl p-2 sm:p-3 text-center flex flex-col items-center justify-center h-[96px] sm:h-[108px] relative overflow-hidden cursor-pointer hover:bg-card-hover">'
         + '<a href="'+d[0]+'" target="_blank" class="absolute inset-0 z-20"></a>'
-        + '<i class="'+d[1]+' text-2xl sm:text-3xl mb-2 text-primary relative z-10"></i>'
-        + '<h3 class="text-xs sm:text-sm font-medium text-white m-0 leading-tight line-clamp-2 relative z-10">'+d[2]+'</h3></div>';
+        + '<i class="'+d[1]+' text-xl sm:text-2xl mb-1 text-primary relative z-10 shrink-0"></i>'
+        + '<h3 class="text-[11px] sm:text-xs font-medium text-white m-0 leading-[1.35] line-clamp-2 relative z-10 break-all">'+d[2]+'</h3></div>';
     });
     h += '</section>';
     main.innerHTML += h;
