@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>WebNav Hub</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#ff9000',
+            dark: '#0d0d0d',
+            card: '#1a1a1a',
+            'card-hover': '#2a2a2a',
+          },
+          fontFamily: {
+            display: ['"Space Grotesk"', 'system-ui', 'sans-serif'],
+            body: ['"DM Sans"', 'system-ui', 'sans-serif'],
+          },
+        },
+      },
+    }
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" />
+  <style>
+    body{background:#0d0d0d}
+    .link-card{transition:transform .2s ease-out,background-color .2s,box-shadow .2s}
+    .link-card:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(255,144,0,.08)}
+    .link-card:hover i{transform:scale(1.15)}
+    .link-card i{transition:transform .2s ease}
+    nav a{transition:background-color .25s,color .25s}
+  </style>
+</head>
+<body class="font-body text-white leading-relaxed">
+
+<header class="bg-black py-5 text-center">
+  <h1 class="font-display text-3xl sm:text-4xl font-bold text-primary tracking-tight uppercase">WebNav Hub</h1>
+</header>
+
+<nav class="bg-card/90 backdrop-blur-sm py-2 px-2 sticky top-0 z-50 border-b border-white/5">
+  <ul id="nav-list" class="flex justify-center flex-wrap gap-1.5 list-none p-0 m-0"></ul>
+</nav>
+
+<main id="content" class="max-w-7xl mx-auto px-3 sm:px-4 lg:px-6 py-4"></main>
+
+<footer class="bg-black text-gray-400 text-center py-4 text-xs">
+  <p>&copy; 2025 WebNav Hub. 保留所有权利。</p>
+  <nav class="mt-2">
+    <a href="#" class="text-gray-400 mx-2 text-xs hover:text-primary transition-colors">隐私政策</a>
+    <a href="#" class="text-gray-400 mx-2 text-xs hover:text-primary transition-colors">使用条款</a>
+    <a href="#" class="text-gray-400 mx-2 text-xs hover:text-primary transition-colors">联系我们</a>
+  </nav>
+</footer>
+
+<script>
+const DATA = [
+  {id:"ai-search",title:"Ai搜索",items:[
+    ["https://chatglm.cn/","fa-solid fa-comment-dots","智谱清言"],
+    ["https://unlimitedai.chat/","fa-solid fa-pepper-hot","无限制AI"],
+    ["https://openrouter.ai/","fa-brands fa-openid","openrouter"],
+    ["https://www.qianwen.com/","fa-solid fa-magnifying-glass","千问国内版"],
+    ["https://chatgpt.com/","fa-brands fa-google","chatgpt"],
+    ["https://www.doubao.com/chat/","fa-solid fa-paw","豆包"],
+    ["https://space.coze.cn/","fa-solid fa-shuttle-space","扣子空间"],
+    ["https://chat.qwen.ai/","fa-brands fa-rocketchat","通义千问"],
+    ["https://kimi.moonshot.cn/","fa-regular fa-moon","kimi"],
+    ["https://yiyan.baidu.com/","fa-solid fa-dumpster-fire","文心一言"],
+    ["https://hunyuan.tencent.com/","fa-solid fa-robot","腾讯混元"],
+    ["https://www.minimax.io/","fa-solid fa-minimize","minimax"],
+    ["https://chat.z.ai/","fa-solid fa-z","z.ai"],
+    ["https://aistudio.google.com/","fa-solid fa-robot","google AIstudio"],
+    ["https://gemini.google.com/","fa-brands fa-google-plus","gemini"],
+    ["https://labs.google/fx/zh","fa-brands fa-google-plus","labs.google"],
+    ["https://jules.google.com/","fa-brands fa-google-plus","jules.google"],
+    ["https://stitch.withgoogle.com/","fa-brands fa-square-google-plus","stitch.withgoogle"],
+    ["https://copilot.microsoft.com/","fa-brands fa-windows","copilot"],
+    ["https://build.nvidia.com/","fa-solid fa-microchip","nvidia"],
+    ["https://modal.com/","fa-solid fa-robot","modal"],
+    ["https://www.firecrawl.dev/","fa-solid fa-robot","firecrawl"],
+    ["https://mistral.ai/","fa-solid fa-brain","mistral"],
+    ["https://groq.com/","fa-solid fa-group-arrows-rotate","groq"],
+    ["https://www.medscape.com/","fa-solid fa-stethoscope","medscape"],
+    ["https://ollama.com/","fa-brands fa-rocketchat","ollama"],
+    ["https://zenmux.ai/","fa-solid fa-mask","zenmux"],
+    ["https://chutes.ai/","fa-solid fa-chalkboard","chutes.ai"],
+    ["https://huggingface.co/","fa-solid fa-face-rolling-eyes","huggingface"],
+    ["https://lmarena.ai/","fa-solid fa-robot","lmarena"],
+    ["https://anyrouter.top/","fa-solid fa-robot","anyrouter"],
+    ["https://api.codemirror.codes/","fa-brands fa-codepen","codemirror"],
+    ["https://x.ai/","fa-brands fa-x-twitter","x.ai"],
+    ["https://ascvdpce.186404.xyz/","fa-solid fa-heart-pulse","pce计算"],
+    ["https://docs.letta.com/","fa-solid fa-code","letta-code"],
+    ["https://v0.dev/","fa-solid fa-v","v0"],
+    ["https://cto.new/","fa-solid fa-v","cto.new"],
+    ["https://www.deepseek.com/","fa-brands fa-rocketchat","deepseek"],
+    ["https://ying.baichuan-ai.com/","fa-brands fa-rocketchat","百小应医疗大模型"],
+    ["https://www.genspark.ai/","fa-brands fa-rocketchat","genspark.ai"],
+    ["https://firebase.google.com/","fa-solid fa-code-branch","firebase.google"],
+    ["https://kiro.dev/","fa-solid fa-code","kiro.dev"],
+    ["https://vibex.iflow.cn/","fa-solid fa-code","iflow"],
+    ["https://www.streamlake.ai/","fa-solid fa-code","streamlake.ai"],
+    ["https://www.codebuff.com/","fa-solid fa-robot","codebuff"],
+    ["https://ampcode.com/","fa-solid fa-code","ampcode"],
+    ["https://siliconflow.cn/","fa-brands fa-confluence","硅基流动"],
+    ["https://www.modelscope.cn/","fa-solid fa-code-branch","魔塔社区"],
+    ["https://maas.xfyun.cn/","fa-solid fa-bolt","讯飞星辰MaaS"],
+    ["https://youmind.com/","fa-solid fa-camera","youmind"],
+    ["https://www.lovart.ai/zh/home","fa-solid fa-file-image","lovart"],
+    ["https://bolt.new/","fa-solid fa-bolt","bolt.new"]
+  ]},
+  {id:"social",title:"社交媒体",items:[
+    ["https://www.facebook.com","fa-brands fa-facebook","Facebook"],
+    ["https://x.com/","fa-brands fa-twitter","Twitter"],
+    ["https://twitterxz.com/","fa-brands fa-x-twitter","推特视频下载"],
+    ["https://www.instagram.com","fa-brands fa-instagram","Instagram"],
+    ["https://render.com/","fa-solid fa-draw-polygon","render"],
+    ["https://deno.com/deploy","fa-solid fa-d","deno"],
+    ["https://railway.com/","fa-solid fa-archway","railway"],
+    ["https://vercel.com/","fa-solid fa-v","vercel"],
+    ["https://www.netlify.com/","fa-brands fa-n","netlify"],
+    ["https://zh.savefrom.net/","fa-solid fa-share-from-square","savefrom"],
+    ["https://goingbus.com/","fa-brands fa-n","爆米花视频"],
+    ["https://www.reddit.com","fa-brands fa-reddit","Reddit"],
+    ["https://www.downloadyoutubesubtitles.com/","fa-brands fa-youtube","油管字幕下载"],
+    ["https://github.com/","fa-brands fa-github","GitHub"],
+    ["https://www.y2mate.com/","fa-solid fa-download","油管视频下载"],
+    ["https://youtube.iiilab.com/","fa-solid fa-download","视频下载"],
+    ["https://suno.com/","fa-solid fa-music","suno"],
+    ["https://mv.186404.xyz/","fa-solid fa-tv","电影导航"]
+  ]},
+  {id:"tools",title:"实用工具",items:[
+    ["https://mockaddress.com/","fa-solid fa-location-dot","MockAddress地址生成器"],
+    ["https://d.186404.xyz/","fa-solid fa-link","短链"],
+    ["https://dynv6.com/","fa-solid fa-network-wired","dynv6"],
+    ["https://fast.com/","fa-solid fa-gauge-high","网速测试"],
+    ["https://www.cloudns.net/","fa-solid fa-cloud","Cloudns"],
+    ["https://www.cloudflare.com/zh-cn/","fa-solid fa-shield-halved","Cloudflare"],
+    ["https://ygpy.net/","fa-solid fa-user-group","一个朋友"],
+    ["https://notebooklm.google/","fa-solid fa-book","谷歌笔记"],
+    ["https://email.ml/","fa-solid fa-envelope","临时邮箱"],
+    ["https://www.ahhhhfs.com/","fa-solid fa-blog","A姐"],
+    ["https://ip.sb/","fa-solid fa-location-dot","IP查询"],
+    ["https://dns.he.net/","fa-solid fa-network-wired","dns.he域名托管"],
+    ["https://www.site.ac/","fa-solid fa-right-left","Site域名转发"],
+    ["https://zh.go-to-library.sk/","fa-solid fa-book-reader","Z-Library"],
+    ["https://domain.digitalplat.org/","fa-solid fa-globe","us.kg域名"],
+    ["https://www.spaceship.com/zh/","fa-solid fa-rocket","Spaceship廉价域名"],
+    ["https://www.namecheap.com/","fa-solid fa-rocket","namecheap廉价域名"],
+    ["https://www.racknerd.com/","fa-solid fa-server","racknerd"],
+    ["https://fontawesome.com/","fa-solid fa-icons","FontAwesome图标"],
+    ["https://worldvectorlogo.com/","fa-regular fa-font-awesome","logosvg"],
+    ["https://scamalytics.com/","fa-solid fa-icons","ip清洁度查询"],
+    ["https://test-ipv6.com/","fa-solid fa-ethernet","test-ipv6"],
+    ["https://html.zone/ip","fa-brands fa-sourcetree","zone/ip"],
+    ["https://www.lumiproxy.com/zh-hans/online-proxy/proxysite/","fa-solid fa-unlock","免费网络代理"],
+    ["https://ipcheck.ing/","fa-solid fa-location-dot","ipcheck"],
+    ["https://console.cron-job.org/","fa-solid fa-ethernet","定时任务cron-job"],
+    ["https://uptimerobot.com/","fa-solid fa-location-dot","uptimerobot"],
+    ["https://forwardemail.net/","fa-solid fa-envelopes-bulk","forwardemail"],
+    ["https://improvmx.com/","fa-solid fa-envelopes-bulk","improvmx"],
+    ["https://gb.w404.nyc.mn/","fa-brands fa-github","github文件加速"],
+    ["https://hostry.com/","fa-solid fa-clock-rotate-left","hostryDNS域名托管"],
+    ["https://www.sitelutions.com/","fa-solid fa-sitemap","免费域名sitelutions"],
+    ["https://www.changeip.com/","fa-solid fa-satellite-dish","免费域名changeip"],
+    ["https://dnsexit.com/","fa-solid fa-users","免费域名dnsexit"],
+    ["https://www.gname.com/","fa-solid fa-users","免费域名gname"],
+    ["https://www.nslookup.io/","fa-solid fa-arrows-rotate","DNS查找nslookup"],
+    ["https://ping0.cc/","fa-solid fa-fingerprint","ping0"],
+    ["https://customer.l53.net/","fa-solid fa-fingerprint","L53免费域名"],
+    ["https://tools.pdf24.org/","fa-solid fa-file-pdf","PDF在线工具"],
+    ["http://free-proxy.cz/en/","fa-brands fa-internet-explorer","free-proxy"],
+    ["https://www.croxyproxy.rocks/_zh/","fa-solid fa-unlock","在线代理croxyproxy"],
+    ["https://doocs.github.io/md/","fa-regular fa-edit","微信Markdown编辑器"],
+    ["https://www.proxysite.com/","fa-solid fa-unlock","proxysite"],
+    ["https://www.serv00.com/","fa-solid fa-server","serv00"],
+    ["https://www.hostuno.com/","fa-solid fa-server","hostuno"],
+    ["https://github.com/Molunerfinn/PicGo","fa-solid fa-cloud-arrow-up","PicGo"],
+    ["https://smms.app/","fa-solid fa-image","SM.MS"],
+    ["https://freeimage.host/","fa-solid fa-photo-film","FreeImageHost"],
+    ["https://cobalt.tools/","fa-brands fa-youtube","cobalt"],
+    ["https://isthisai.com/","fa-solid fa-code","AI鉴定isthisai"],
+    ["https://tinywow.com/","fa-brands fa-free-code-camp","tinywow"],
+    ["https://paywallbuster.com/","fa-solid fa-key","付费墙"],
+    ["https://paywallhub.ndjp.net/","fa-solid fa-unlock","PaywallHub"],
+    ["https://fmhy.net/","fa-regular fa-folder-open","fmhy"],
+    ["https://www.remove.bg/","fa-solid fa-image-portrait","remove"],
+    ["https://picwish.com/","fa-regular fa-image","picwish"],
+    ["https://domain.stackryze.com/","fa-solid fa-landmark-dome","免费域名Stackryze"],
+    ["https://www.hidoha.net/","fa-solid fa-fingerprint","免费域名HiDNS"],
+    ["https://pixabay.com/","fa-brands fa-pix","pixabay"],
+    ["https://www.infinityfree.com/","fa-solid fa-infinity","InfinityFree"],
+    ["https://anyvoice.net/","fa-solid fa-microphone","anyvoice"],
+    ["https://fish.audio/","fa-solid fa-fish","fish.audio"],
+    ["https://noiz.ai/","fa-solid fa-circle-notch","noizai"],
+    ["https://design.ndjp.net/","fa-solid fa-file-audio","Design Radar设计灵感导航"],
+    ["https://desec.io/","fa-solid fa-anchor","desec免费域名"],
+    ["https://lovable.dev/","fa-solid fa-shield-heart","lovable网站生成"],
+    ["https://ndjp.net/","fa-solid fa-globe","ndjp免费域名"],
+    ["https://www.dynu.com/","fa-solid fa-globe","dynu免费域名"],
+    ["https://zone.id/","fa-solid fa-id-card-clip","zone免费域名"],
+    ["https://my.dnshe.com/","fa-solid fa-id-card-clip","dnshe免费域名"],
+    ["https://x10hosting.com/","fa-solid fa-ghost","x10hosting免费托管"],
+    ["https://www.nodeloc.com/","fa-brands fa-hashnode","nodeloc社区"],
+    ["https://same.new/","fa-solid fa-copy","same复制网站"],
+    ["https://claw.cloud/","fa-solid fa-cloud","claw容器"],
+    ["https://zoneabc.net/","fa-solid fa-cloud","免费域名zoneabc"],
+    ["https://nic.gv.uy/","fa-solid fa-cloud","免费域名gv.uy"],
+    ["https://isroot.in/","fa-solid fa-cloud","免费域名isroot"],
+    ["https://www.subeasy.ai/zh-CN","fa-solid fa-closed-captioning","subeasy字幕"],
+    ["https://cardify.godsbee.com/","fa-solid fa-credit-card","知识卡片"],
+    ["https://www.webhostmost.com/","fa-solid fa-web-awesome","webhostmost网站托管"],
+    ["https://edgeone.ai/","fa-brands fa-edge","edgeone"],
+    ["https://cyberpanel.net/","fa-solid fa-graduation-cap","cyberpanel免费VPN"],
+    ["https://www.stormkit.io/","fa-solid fa-cloud","Stormkit"]
+  ]},
+  {id:"tech-news",title:"科技资讯",items:[
+    ["https://www.techcrunch.com","fa-solid fa-newspaper","TechCrunch"],
+    ["https://www.wired.com","fa-solid fa-bolt","Wired"],
+    ["https://www.theverge.com","fa-solid fa-laptop","The Verge"],
+    ["https://arstechnica.com","fa-solid fa-rocket","Ars Technica"],
+    ["https://www.engadget.com","fa-solid fa-mobile-screen","Engadget"],
+    ["https://scitechdaily.com/","fa-solid fa-microscope","科技日报"],
+    ["https://techradar.com","fa-solid fa-satellite","TechRadar"],
+    ["https://b.186404.xyz/","fa-solid fa-blog","科技博客"],
+    ["https://www.cnbeta.com.tw/","fa-solid fa-circle-info","cnbeta"]
+  ]},
+  {id:"cloud-storage",title:"云存储",items:[
+    ["https://www.dropbox.com","fa-brands fa-dropbox","Dropbox"],
+    ["https://drive.google.com","fa-brands fa-google-drive","Google Drive"],
+    ["https://onedrive.live.com","fa-brands fa-microsoft","OneDrive"],
+    ["https://www.box.com","fa-solid fa-box","Box"],
+    ["https://www.mediafire.com","fa-solid fa-file","MediaFire"],
+    ["https://mega.nz","fa-solid fa-cloud-arrow-up","MEGA"],
+    ["https://mypikpak.com/","fa-solid fa-cloud","PikPak"]
+  ]},
+  {id:"email",title:"电子邮箱",items:[
+    ["https://www.zoho.com/mail/","fa-solid fa-envelope","Zoho Mail企业邮箱"],
+    ["https://outlook.live.com","fa-brands fa-microsoft","Outlook"],
+    ["https://cock.li/","fa-solid fa-envelope-open","cock邮箱"],
+    ["https://disroot.org/","fa-solid fa-envelope-circle-check","disroot邮箱"],
+    ["https://www.protonmail.com","fa-solid fa-shield-halved","ProtonMail"],
+    ["https://tinkmail.me/","fa-brands fa-qq","tinkmail企业邮箱"],
+    ["https://em.bjedu.tech/","fa-solid fa-at","Cloudflare临时邮件"],
+    ["https://edumail.su/","fa-solid fa-envelopes-bulk","临时教育邮箱"]
+  ]}
+];
+
+(function(){
+  var nav = document.getElementById("nav-list");
+  var main = document.getElementById("content");
+
+  DATA.forEach(function(cat){
+    nav.innerHTML += '<li><a href="#'+cat.id+'" class="text-white no-underline text-sm font-semibold font-display px-4 py-2 rounded-full hover:bg-primary hover:text-black inline-block">'+cat.title+'</a></li>';
+
+    var h = '<h2 class="font-display text-xl sm:text-2xl font-bold mt-8 mb-4 text-primary border-l-4 border-primary pl-3 uppercase tracking-tight" id="'+cat.id+'">'+cat.title+'</h2>';
+    h += '<section class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-7 xl:grid-cols-8 gap-2.5 sm:gap-3 mb-8">';
+    cat.items.forEach(function(d){
+      h += '<div class="link-card bg-card rounded-xl p-3 sm:p-4 text-center flex flex-col items-center justify-center min-h-[80px] sm:min-h-[90px] relative overflow-hidden cursor-pointer hover:bg-card-hover">'
+        + '<a href="'+d[0]+'" target="_blank" class="absolute inset-0 z-20"></a>'
+        + '<i class="'+d[1]+' text-2xl sm:text-3xl mb-2 text-primary relative z-10"></i>'
+        + '<h3 class="text-xs sm:text-sm font-medium text-white m-0 leading-tight line-clamp-2 relative z-10">'+d[2]+'</h3></div>';
+    });
+    h += '</section>';
+    main.innerHTML += h;
+  });
+
+  var navLinks = nav.querySelectorAll("a");
+  navLinks.forEach(function(link){
+    link.addEventListener("click",function(e){
+      e.preventDefault();
+      navLinks.forEach(function(l){l.classList.remove("active","bg-primary","!text-black")});
+      this.classList.add("active","bg-primary","!text-black");
+      var el = document.getElementById(this.getAttribute("href").split("#")[1]);
+      if(el){el.scrollIntoView({behavior:"smooth"});history.pushState(null,"",location.pathname+"#"+this.getAttribute("href").split("#")[1])}
+    });
+  });
+
+  function handleHash(){
+    var h = location.hash;
+    if(h){
+      var el = document.getElementById(h.substring(1));
+      if(el){
+        el.scrollIntoView({behavior:"smooth"});
+        var a = nav.querySelector("a[href='"+h+"']");
+        if(a){navLinks.forEach(function(l){l.classList.remove("active","bg-primary","!text-black")});a.classList.add("active","bg-primary","!text-black")}
+      }
+    }
+  }
+  window.addEventListener("hashchange",handleHash);
+  handleHash();
+})();
+</script>
+</body>
+</html>
