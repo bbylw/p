@@ -1,0 +1,918 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>WebNav Hub</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" />
+  <style>
+    :root {
+      --bg: #08080a;
+      --surface: rgba(255, 255, 255, 0.03);
+      --surface-hover: rgba(255, 255, 255, 0.07);
+      --border: rgba(255, 255, 255, 0.06);
+      --border-hover: rgba(255, 140, 56, 0.35);
+      --accent: #ff8c38;
+      --accent-dim: rgba(255, 140, 56, 0.12);
+      --text: #edeae4;
+      --text-muted: #7a756e;
+      --text-dim: #3d3a36;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      font-size: 16px;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'DM Mono', 'Menlo', monospace;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    .bg-mesh {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      pointer-events: none;
+      background:
+        radial-gradient(ellipse 900px 700px at 15% 5%, rgba(255, 140, 56, 0.04), transparent 60%),
+        radial-gradient(ellipse 700px 900px at 85% 50%, rgba(56, 120, 255, 0.025), transparent 55%),
+        radial-gradient(ellipse 600px 600px at 50% 95%, rgba(140, 56, 255, 0.02), transparent 50%),
+        var(--bg);
+    }
+
+    header {
+      position: relative;
+      text-align: center;
+      padding: 5rem 1rem 2.5rem;
+    }
+
+    header::before {
+      content: '';
+      position: absolute;
+      top: 40%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 400px;
+      height: 400px;
+      background: radial-gradient(circle, rgba(255, 140, 56, 0.06), transparent 70%);
+      border-radius: 50%;
+      pointer-events: none;
+      animation: headerPulse 6s ease-in-out infinite;
+    }
+
+    @keyframes headerPulse {
+
+      0%,
+      100% {
+        opacity: 0.4;
+        transform: translate(-50%, -50%) scale(1);
+      }
+
+      50% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1.15);
+      }
+    }
+
+    header h1 {
+      font-family: 'Syne', sans-serif;
+      font-size: 3.2rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      color: var(--text);
+      text-shadow: 0 0 80px rgba(255, 140, 56, 0.12);
+      position: relative;
+      z-index: 1;
+    }
+
+    header .subtitle {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      margin-top: 0.6rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .search-wrap {
+      max-width: 460px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+      position: relative;
+    }
+
+    .search-wrap .search-icon {
+      position: absolute;
+      left: 2.2rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-dim);
+      font-size: 0.85rem;
+      transition: color 0.3s;
+      pointer-events: none;
+    }
+
+    #search-input {
+      width: 100%;
+      padding: 0.7rem 1.2rem 0.7rem 2.8rem;
+      border: 1px solid var(--border);
+      border-radius: 100px;
+      background: var(--surface);
+      color: var(--text);
+      font-family: 'DM Mono', monospace;
+      font-size: 0.82rem;
+      outline: none;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+
+    #search-input:focus {
+      border-color: rgba(255, 140, 56, 0.4);
+      box-shadow: 0 0 0 3px var(--accent-dim), 0 4px 24px rgba(0, 0, 0, 0.2);
+    }
+
+    #search-input::placeholder {
+      color: var(--text-dim);
+    }
+
+    .search-wrap:focus-within .search-icon {
+      color: var(--accent);
+    }
+
+    nav#top-nav {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: rgba(8, 8, 10, 0.85);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+      padding: 0.6rem 1rem;
+      margin-top: 1.5rem;
+    }
+
+    nav#top-nav ul {
+      list-style: none;
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 0.35rem;
+    }
+
+    nav#top-nav a {
+      display: block;
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.78rem;
+      font-weight: 500;
+      padding: 0.4rem 1rem;
+      border-radius: 100px;
+      transition: all 0.25s ease;
+      letter-spacing: 0.02em;
+    }
+
+    nav#top-nav a:hover {
+      color: var(--text);
+      background: rgba(255, 255, 255, 0.06);
+    }
+
+    nav#top-nav a.active {
+      background: var(--accent);
+      color: #08080a;
+      font-weight: 500;
+    }
+
+    main {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 1rem 1.5rem 4rem;
+    }
+
+    .category-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--text);
+      margin: 3rem 0 1.2rem;
+      padding-left: 1rem;
+      border-left: 3px solid var(--accent);
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .category-count {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.68rem;
+      color: var(--text-dim);
+      font-weight: 400;
+      letter-spacing: 0;
+      text-transform: none;
+    }
+
+    .link-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(8.5rem, 1fr));
+      gap: 0.75rem;
+    }
+
+    .link-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.3rem 0.6rem 1rem;
+      text-align: center;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 95px;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      opacity: 0;
+      transform: translateY(12px);
+    }
+
+    .link-card.revealed {
+      animation: cardReveal 0.45s ease forwards;
+    }
+
+    @keyframes cardReveal {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .link-card a {
+      position: absolute;
+      inset: 0;
+      text-decoration: none;
+      z-index: 12;
+      color: transparent;
+    }
+
+    .link-card:hover {
+      background: var(--surface-hover);
+      border-color: var(--border-hover);
+      transform: translateY(-3px);
+      box-shadow:
+        0 8px 32px rgba(0, 0, 0, 0.25),
+        0 0 0 1px rgba(255, 140, 56, 0.08);
+    }
+
+    .link-card i {
+      font-size: 1.6rem;
+      margin-bottom: 0.65rem;
+      color: var(--accent);
+      transition: all 0.25s ease;
+      position: relative;
+      z-index: 11;
+    }
+
+    .link-card:hover i {
+      transform: scale(1.12);
+      filter: drop-shadow(0 0 8px rgba(255, 140, 56, 0.4));
+    }
+
+    .link-card h3 {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.72rem;
+      font-weight: 400;
+      margin: 0;
+      color: var(--text-muted);
+      line-height: 1.35;
+      max-width: 100%;
+      height: 2.7em;
+      overflow: hidden;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      line-clamp: 2;
+      -webkit-box-orient: vertical;
+      text-overflow: ellipsis;
+      padding: 0 0.2rem;
+      position: relative;
+      z-index: 11;
+      transition: color 0.25s ease;
+    }
+
+    .link-card:hover h3 {
+      color: var(--text);
+    }
+
+    .no-results {
+      text-align: center;
+      padding: 4rem 1rem;
+      color: var(--text-dim);
+      font-size: 0.85rem;
+      display: none;
+    }
+
+    .no-results.visible {
+      display: block;
+    }
+
+    .no-results i {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+      display: block;
+    }
+
+    .back-top {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: rgba(8, 8, 10, 0.8);
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: all 0.3s ease;
+      z-index: 999;
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+    }
+
+    .back-top.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .back-top:hover {
+      background: var(--accent);
+      color: #08080a;
+      border-color: var(--accent);
+      transform: translateY(-2px);
+    }
+
+    footer {
+      text-align: center;
+      padding: 3rem 1rem 2rem;
+      color: var(--text-dim);
+      font-size: 0.72rem;
+      border-top: 1px solid var(--border);
+      margin-top: 2rem;
+    }
+
+    footer .footer-links {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 0.8rem;
+    }
+
+    footer .footer-links a {
+      color: var(--text-dim);
+      text-decoration: none;
+      font-size: 0.72rem;
+      padding: 0.3rem 0.6rem;
+      border-radius: 100px;
+      transition: color 0.25s ease;
+    }
+
+    footer .footer-links a:hover {
+      color: var(--text-muted);
+    }
+
+    @media (max-width: 768px) {
+      header {
+        padding: 3.5rem 1rem 2rem;
+      }
+
+      header h1 {
+        font-size: 2.4rem;
+      }
+
+      main {
+        padding: 0.8rem 1rem 3rem;
+      }
+
+      .link-grid {
+        grid-template-columns: repeat(auto-fill, minmax(7.5rem, 1fr));
+        gap: 0.65rem;
+      }
+
+      .category-title {
+        font-size: 1.05rem;
+        margin: 2.5rem 0 1rem;
+      }
+
+      .link-card {
+        min-height: 85px;
+        padding: 1.1rem 0.5rem 0.8rem;
+      }
+
+      .link-card i {
+        font-size: 1.4rem;
+      }
+
+      .link-card h3 {
+        font-size: 0.68rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      html {
+        font-size: 15px;
+      }
+
+      header {
+        padding: 2.5rem 1rem 1.5rem;
+      }
+
+      header h1 {
+        font-size: 2rem;
+      }
+
+      header .subtitle {
+        font-size: 0.7rem;
+      }
+
+      .link-grid {
+        grid-template-columns: repeat(auto-fill, minmax(6rem, 1fr));
+        gap: 0.55rem;
+      }
+
+      nav#top-nav a {
+        padding: 0.35rem 0.75rem;
+        font-size: 0.72rem;
+      }
+
+      .link-card {
+        min-height: 75px;
+        padding: 0.9rem 0.4rem 0.7rem;
+      }
+
+      .link-card i {
+        font-size: 1.25rem;
+        margin-bottom: 0.45rem;
+      }
+
+      .link-card h3 {
+        font-size: 0.64rem;
+        height: 2.5em;
+      }
+
+      .back-top {
+        bottom: 1.2rem;
+        right: 1.2rem;
+        width: 36px;
+        height: 36px;
+      }
+    }
+
+    @media (max-width: 360px) {
+      html {
+        font-size: 14px;
+      }
+
+      .link-grid {
+        grid-template-columns: repeat(auto-fill, minmax(5.2rem, 1fr));
+      }
+
+      header h1 {
+        font-size: 1.7rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="bg-mesh"></div>
+
+  <header>
+    <h1>WebNav Hub</h1>
+    <p class="subtitle">curated digital navigation</p>
+  </header>
+
+  <div class="search-wrap">
+    <i class="fa-solid fa-magnifying-glass search-icon"></i>
+    <input type="text" id="search-input" placeholder="搜索导航..." autocomplete="off" />
+  </div>
+
+  <nav id="top-nav">
+    <ul>
+      <li><a href="#ai-search">Ai搜索</a></li>
+      <li><a href="#social">社交媒体</a></li>
+      <li><a href="#tools">实用工具</a></li>
+      <li><a href="#tech-news">科技资讯</a></li>
+      <li><a href="#cloud-storage">云存储</a></li>
+      <li><a href="#email">电子邮箱</a></li>
+    </ul>
+  </nav>
+
+  <main id="main-content">
+    <p style="text-align: center; color: var(--text-dim); padding: 3rem 0;">正在加载导航数据...</p>
+  </main>
+
+  <div class="no-results" id="no-results">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    没有找到匹配的导航
+  </div>
+
+  <button class="back-top" id="back-top" title="回到顶部">
+    <i class="fa-solid fa-arrow-up"></i>
+  </button>
+
+  <footer>
+    <p>&copy; <span id="year"></span> WebNav Hub. 保留所有权利。</p>
+    <div class="footer-links">
+      <a href="#">隐私政策</a>
+      <a href="#">使用条款</a>
+      <a href="#">联系我们</a>
+    </div>
+  </footer>
+
+  <script>
+    const navData = [
+      {
+        id: "ai-search",
+        title: "Ai搜索",
+        links: [
+          { name: "智谱清言", url: "https://chatglm.cn/", icon: "fa-solid fa-comment-dots" },
+          { name: "mimo小米AI", url: "https://mimo.xiaomi.com/", icon: "fa-solid fa-mobile-retro" },
+          { name: "openrouter", url: "https://openrouter.ai/", icon: "fa-brands fa-openid" },
+          { name: "千问国内版", url: "https://www.qianwen.com/", icon: "fa-solid fa-magnifying-glass" },
+          { name: "chatgpt", url: "https://chatgpt.com/", icon: "fa-brands fa-google" },
+          { name: "豆包", url: "https://www.doubao.com/chat/", icon: "fa-solid fa-paw" },
+          { name: "扣子空间", url: "https://space.coze.cn/", icon: "fa-solid fa-shuttle-space" },
+          { name: "通义千问", url: "https://chat.qwen.ai/", icon: "fa-brands fa-rocketchat" },
+          { name: "kimi", url: "https://kimi.moonshot.cn/", icon: "fa-regular fa-moon" },
+          { name: "文心一言", url: "https://yiyan.baidu.com/", icon: "fa-solid fa-dumpster-fire" },
+          { name: "腾讯混元", url: "https://hunyuan.tencent.com/", icon: "fa-solid fa-robot" },
+          { name: "minimax", url: "https://www.minimax.io/", icon: "fa-solid fa-minimize" },
+          { name: "z.ai", url: "https://chat.z.ai/", icon: "fa-solid fa-z" },
+          { name: "google AIstudio", url: "https://aistudio.google.com/", icon: "fa-solid fa-robot" },
+          { name: "gemini", url: "https://gemini.google.com/", icon: "fa-brands fa-google-plus" },
+          { name: "labs.google", url: "https://labs.google/fx/zh", icon: "fa-brands fa-google-plus" },
+          { name: "jules.google", url: "https://jules.google.com/", icon: "fa-brands fa-google-plus" },
+          { name: "stitch.withgoogle", url: "https://stitch.withgoogle.com/", icon: "fa-brands fa-square-google-plus" },
+          { name: "copilot", url: "https://copilot.microsoft.com/", icon: "fa-brands fa-windows" },
+          { name: "nvidia", url: "https://build.nvidia.com/", icon: "fa-solid fa-microchip" },
+          { name: "modal", url: "https://modal.com/", icon: "fa-solid fa-robot" },
+          { name: "firecrawl", url: "https://www.firecrawl.dev/", icon: "fa-solid fa-robot" },
+          { name: "mistral", url: "https://mistral.ai/", icon: "fa-solid fa-brain" },
+          { name: "groq", url: "https://groq.com/", icon: "fa-solid fa-group-arrows-rotate" },
+          { name: "medscape", url: "https://www.medscape.com/", icon: "fa-solid fa-stethoscope" },
+          { name: "ollama", url: "https://ollama.com/", icon: "fa-brands fa-rocketchat" },
+          { name: "zenmux", url: "https://zenmux.ai/", icon: "fa-solid fa-mask" },
+          { name: "chutes.ai", url: "https://chutes.ai/", icon: "fa-solid fa-chalkboard" },
+          { name: "huggingface", url: "https://huggingface.co/", icon: "fa-solid fa-face-rolling-eyes" },
+          { name: "lmarena", url: "https://lmarena.ai/", icon: "fa-solid fa-robot" },
+          { name: "anyrouter", url: "https://anyrouter.top/", icon: "fa-solid fa-robot" },
+          { name: "codemirror", url: "https://api.codemirror.codes/", icon: "fa-brands fa-codepen" },
+          { name: "x.ai", url: "https://x.ai/", icon: "fa-brands fa-x-twitter" },
+          { name: "pce计算", url: "https://ascvdpce.186404.xyz/", icon: "fa-solid fa-heart-pulse" },
+          { name: "letta-code", url: "https://docs.letta.com/", icon: "fa-solid fa-code" },
+          { name: "v0", url: "https://v0.dev/", icon: "fa-solid fa-v" },
+          { name: "cto.new", url: "https://cto.new/", icon: "fa-solid fa-v" },
+          { name: "deepseek", url: "https://www.deepseek.com/", icon: "fa-brands fa-rocketchat" },
+          { name: "百小应医疗大模型", url: "https://ying.baichuan-ai.com/", icon: "fa-brands fa-rocketchat" },
+          { name: "genspark.ai", url: "https://www.genspark.ai/", icon: "fa-brands fa-rocketchat" },
+          { name: "firebase.google", url: "https://firebase.google.com/", icon: "fa-solid fa-code-branch" },
+          { name: "kiro.dev", url: "https://kiro.dev/", icon: "fa-solid fa-code" },
+          { name: "iflow", url: "https://vibex.iflow.cn/", icon: "fa-solid fa-code" },
+          { name: "streamlake.ai", url: "https://www.streamlake.ai/", icon: "fa-solid fa-code" },
+          { name: "codebuff", url: "https://www.codebuff.com/", icon: "fa-solid fa-robot" },
+          { name: "ampcode", url: "https://ampcode.com/", icon: "fa-solid fa-code" },
+          { name: "硅基流动", url: "https://siliconflow.cn/", icon: "fa-brands fa-confluence" },
+          { name: "魔塔社区", url: "https://www.modelscope.cn/", icon: "fa-solid fa-code-branch" },
+          { name: "讯飞星辰MaaS", url: "https://maas.xfyun.cn/", icon: "fa-solid fa-bolt" },
+          { name: "youmind", url: "https://youmind.com/", icon: "fa-solid fa-camera" },
+          { name: "lovart", url: "https://www.lovart.ai/zh/home", icon: "fa-solid fa-file-image" },
+          { name: "bolt.new", url: "https://bolt.new/", icon: "fa-solid fa-bolt" }
+        ]
+      },
+      {
+        id: "social",
+        title: "社交媒体",
+        links: [
+          { name: "Facebook", url: "https://www.facebook.com", icon: "fa-brands fa-facebook" },
+          { name: "Twitter", url: "https://x.com/", icon: "fa-brands fa-twitter" },
+          { name: "推特视频下载", url: "https://twitterxz.com/", icon: "fa-brands fa-x-twitter" },
+          { name: "Instagram", url: "https://www.instagram.com", icon: "fa-brands fa-instagram" },
+          { name: "render", url: "https://render.com/", icon: "fa-solid fa-draw-polygon" },
+          { name: "deno", url: "https://deno.com/deploy", icon: "fa-solid fa-d" },
+          { name: "railway", url: "https://railway.com/", icon: "fa-solid fa-archway" },
+          { name: "vercel", url: "https://vercel.com/", icon: "fa-solid fa-v" },
+          { name: "netlify", url: "https://www.netlify.com/", icon: "fa-brands fa-n" },
+          { name: "savefrom", url: "https://zh.savefrom.net/", icon: "fa-solid fa-share-from-square" },
+          { name: "爆米花视频", url: "https://goingbus.com/", icon: "fa-brands fa-n" },
+          { name: "Reddit", url: "https://www.reddit.com", icon: "fa-brands fa-reddit" },
+          { name: "油管字幕下载", url: "https://www.downloadyoutubesubtitles.com/", icon: "fa-brands fa-youtube" },
+          { name: "GitHub", url: "https://github.com/", icon: "fa-brands fa-github" },
+          { name: "油管视频下载", url: "https://www.y2mate.com/", icon: "fa-solid fa-download" },
+          { name: "视频下载", url: "https://youtube.iiilab.com/", icon: "fa-solid fa-download" },
+          { name: "suno", url: "https://suno.com/", icon: "fa-solid fa-music" },
+          { name: "电影导航", url: "https://mv.186404.xyz/", icon: "fa-solid fa-tv" }
+        ]
+      },
+      {
+        id: "tools",
+        title: "实用工具",
+        links: [
+          { name: "MockAddress地址生成器", url: "https://mockaddress.com/", icon: "fa-solid fa-location-dot" },
+          { name: "短链", url: "https://d.186404.xyz/", icon: "fa-solid fa-link" },
+          { name: "dynv6", url: "https://dynv6.com/", icon: "fa-solid fa-network-wired" },
+          { name: "网速测试", url: "https://fast.com/", icon: "fa-solid fa-gauge-high" },
+          { name: "Cloudns", url: "https://www.cloudns.net/", icon: "fa-solid fa-cloud" },
+          { name: "Cloudflare", url: "https://www.cloudflare.com/zh-cn/", icon: "fa-solid fa-shield-halved" },
+          { name: "一个朋友", url: "https://ygpy.net/", icon: "fa-solid fa-user-group" },
+          { name: "谷歌笔记", url: "https://notebooklm.google/", icon: "fa-solid fa-book" },
+          { name: "临时邮箱", url: "https://email.ml/", icon: "fa-solid fa-envelope" },
+          { name: "A姐", url: "https://www.ahhhhfs.com/", icon: "fa-solid fa-blog" },
+          { name: "IP查询", url: "https://ip.sb/", icon: "fa-solid fa-location-dot" },
+          { name: "dns.he域名托管", url: "https://dns.he.net/", icon: "fa-solid fa-network-wired" },
+          { name: "Site域名转发", url: "https://www.site.ac/", icon: "fa-solid fa-right-left" },
+          { name: "Z-Library", url: "https://zh.go-to-library.sk/", icon: "fa-solid fa-book-reader" },
+          { name: "us.kg域名", url: "https://domain.digitalplat.org/", icon: "fa-solid fa-globe" },
+          { name: "Spaceship廉价域名", url: "https://www.spaceship.com/zh/", icon: "fa-solid fa-rocket" },
+          { name: "namecheap廉价域名", url: "https://www.namecheap.com/", icon: "fa-solid fa-rocket" },
+          { name: "racknerd", url: "https://www.racknerd.com/", icon: "fa-solid fa-server" },
+          { name: "FontAwesome图标", url: "https://fontawesome.com/", icon: "fa-solid fa-icons" },
+          { name: "logosvg", url: "https://worldvectorlogo.com/", icon: "fa-regular fa-font-awesome" },
+          { name: "ip清洁度查询", url: "https://scamalytics.com/", icon: "fa-solid fa-icons" },
+          { name: "test-ipv6", url: "https://test-ipv6.com/", icon: "fa-solid fa-ethernet" },
+          { name: "zone/ip", url: "https://html.zone/ip", icon: "fa-brands fa-sourcetree" },
+          { name: "免费网络代理", url: "https://www.lumiproxy.com/zh-hans/online-proxy/proxysite/", icon: "fa-solid fa-unlock" },
+          { name: "ipcheck", url: "https://ipcheck.ing/", icon: "fa-solid fa-location-dot" },
+          { name: "定时任务cron-job", url: "https://console.cron-job.org/", icon: "fa-solid fa-ethernet" },
+          { name: "uptimerobot", url: "https://uptimerobot.com/", icon: "fa-solid fa-location-dot" },
+          { name: "forwardemail", url: "https://forwardemail.net/", icon: "fa-solid fa-envelopes-bulk" },
+          { name: "improvmx", url: "https://improvmx.com/", icon: "fa-solid fa-envelopes-bulk" },
+          { name: "github文件加速", url: "https://gb.w404.nyc.mn/", icon: "fa-brands fa-github" },
+          { name: "hostryDNS域名托管", url: "https://hostry.com/", icon: "fa-solid fa-clock-rotate-left" },
+          { name: "免费域名sitelutions", url: "https://www.sitelutions.com/", icon: "fa-solid fa-sitemap" },
+          { name: "免费域名changeip", url: "https://www.changeip.com/", icon: "fa-solid fa-satellite-dish" },
+          { name: "免费域名dnsexit", url: "https://dnsexit.com/", icon: "fa-solid fa-users" },
+          { name: "免费域名gname", url: "https://www.gname.com/", icon: "fa-solid fa-users" },
+          { name: "DNS查找nslookup", url: "https://www.nslookup.io/", icon: "fa-solid fa-arrows-rotate" },
+          { name: "ping0", url: "https://ping0.cc/", icon: "fa-solid fa-fingerprint" },
+          { name: "L53免费域名", url: "https://customer.l53.net/", icon: "fa-solid fa-fingerprint" },
+          { name: "PDF在线工具", url: "https://tools.pdf24.org/", icon: "fa-solid fa-file-pdf" },
+          { name: "free-proxy", url: "http://free-proxy.cz/en/", icon: "fa-brands fa-internet-explorer" },
+          { name: "在线代理croxyproxy", url: "https://www.croxyproxy.rocks/_zh/", icon: "fa-solid fa-unlock" },
+          { name: "微信Markdown编辑器", url: "https://doocs.github.io/md/", icon: "fa-regular fa-edit" },
+          { name: "proxysite", url: "https://www.proxysite.com/", icon: "fa-solid fa-unlock" },
+          { name: "serv00", url: "https://www.serv00.com/", icon: "fa-solid fa-server" },
+          { name: "hostuno", url: "https://www.hostuno.com/", icon: "fa-solid fa-server" },
+          { name: "PicGo", url: "https://github.com/Molunerfinn/PicGo", icon: "fa-solid fa-cloud-arrow-up" },
+          { name: "SM.MS", url: "https://smms.app/", icon: "fa-solid fa-image" },
+          { name: "FreeImageHost", url: "https://freeimage.host/", icon: "fa-solid fa-photo-film" },
+          { name: "cobalt", url: "https://cobalt.tools/", icon: "fa-brands fa-youtube" },
+          { name: "AI鉴定isthisai", url: "https://isthisai.com/", icon: "fa-solid fa-code" },
+          { name: "tinywow", url: "https://tinywow.com/", icon: "fa-brands fa-free-code-camp" },
+          { name: "付费墙", url: "https://paywallbuster.com/", icon: "fa-solid fa-key" },
+          { name: "PaywallHub", url: "https://paywallhub.ndjp.net/", icon: "fa-solid fa-unlock" },
+          { name: "fmhy", url: "https://fmhy.net/", icon: "fa-regular fa-folder-open" },
+          { name: "remove", url: "https://www.remove.bg/", icon: "fa-solid fa-image-portrait" },
+          { name: "picwish", url: "https://picwish.com/", icon: "fa-regular fa-image" },
+          { name: "免费域名Stackryze", url: "https://domain.stackryze.com/", icon: "fa-solid fa-landmark-dome" },
+          { name: "免费域名HiDNS", url: "https://www.hidoha.net/", icon: "fa-solid fa-fingerprint" },
+          { name: "pixabay", url: "https://pixabay.com/", icon: "fa-brands fa-pix" },
+          { name: "InfinityFree", url: "https://www.infinityfree.com/", icon: "fa-solid fa-infinity" },
+          { name: "anyvoice", url: "https://anyvoice.net/", icon: "fa-solid fa-microphone" },
+          { name: "fish.audio", url: "https://fish.audio/", icon: "fa-solid fa-fish" },
+          { name: "noizai", url: "https://noiz.ai/", icon: "fa-solid fa-circle-notch" },
+          { name: "Design Radar设计灵感导航", url: "https://design.ndjp.net/", icon: "fa-solid fa-file-audio" },
+          { name: "desec免费域名", url: "https://desec.io/", icon: "fa-solid fa-anchor" },
+          { name: "lovable网站生成", url: "https://lovable.dev/", icon: "fa-solid fa-shield-heart" },
+          { name: "ndjp免费域名", url: "https://ndjp.net/", icon: "fa-solid fa-globe" },
+          { name: "dynu免费域名", url: "https://www.dynu.com/", icon: "fa-solid fa-globe" },
+          { name: "zone免费域名", url: "https://zone.id/", icon: "fa-solid fa-id-card-clip" },
+          { name: "dnshe免费域名", url: "https://my.dnshe.com/", icon: "fa-solid fa-id-card-clip" },
+          { name: "x10hosting免费托管", url: "https://x10hosting.com/", icon: "fa-solid fa-ghost" },
+          { name: "nodeloc社区", url: "https://www.nodeloc.com/", icon: "fa-brands fa-hashnode" },
+          { name: "same复制网站", url: "https://same.new/", icon: "fa-solid fa-copy" },
+          { name: "claw容器", url: "https://claw.cloud/", icon: "fa-solid fa-cloud" },
+          { name: "免费域名zoneabc", url: "https://zoneabc.net/", icon: "fa-solid fa-cloud" },
+          { name: "免费域名gv.uy", url: "https://nic.gv.uy/", icon: "fa-solid fa-cloud" },
+          { name: "免费域名isroot", url: "https://isroot.in/", icon: "fa-solid fa-cloud" },
+          { name: "subeasy字幕", url: "https://www.subeasy.ai/zh-CN", icon: "fa-solid fa-closed-captioning" },
+          { name: "知识卡片", url: "https://cardify.godsbee.com/", icon: "fa-solid fa-credit-card" },
+          { name: "webhostmost网站托管", url: "https://www.webhostmost.com/", icon: "fa-solid fa-web-awesome" },
+          { name: "edgeone", url: "https://edgeone.ai/", icon: "fa-brands fa-edge" },
+          { name: "cyberpanel免费VPN", url: "https://cyberpanel.net/", icon: "fa-solid fa-graduation-cap" },
+          { name: "Stormkit", url: "https://www.stormkit.io/", icon: "fa-solid fa-cloud" }
+        ]
+      },
+      {
+        id: "tech-news",
+        title: "科技资讯",
+        links: [
+          { name: "TechCrunch", url: "https://www.techcrunch.com", icon: "fa-solid fa-newspaper" },
+          { name: "Wired", url: "https://www.wired.com", icon: "fa-solid fa-bolt" },
+          { name: "The Verge", url: "https://www.theverge.com", icon: "fa-solid fa-laptop" },
+          { name: "Ars Technica", url: "https://arstechnica.com", icon: "fa-solid fa-rocket" },
+          { name: "Engadget", url: "https://www.engadget.com", icon: "fa-solid fa-mobile-screen" },
+          { name: "科技日报", url: "https://scitechdaily.com/", icon: "fa-solid fa-microscope" },
+          { name: "TechRadar", url: "https://techradar.com", icon: "fa-solid fa-satellite" },
+          { name: "科技博客", url: "https://b.186404.xyz/", icon: "fa-solid fa-blog" },
+          { name: "cnbeta", url: "https://www.cnbeta.com.tw/", icon: "fa-solid fa-circle-info" }
+        ]
+      },
+      {
+        id: "cloud-storage",
+        title: "云存储",
+        links: [
+          { name: "Dropbox", url: "https://www.dropbox.com", icon: "fa-brands fa-dropbox" },
+          { name: "Google Drive", url: "https://drive.google.com", icon: "fa-brands fa-google-drive" },
+          { name: "OneDrive", url: "https://onedrive.live.com", icon: "fa-brands fa-microsoft" },
+          { name: "Box", url: "https://www.box.com", icon: "fa-solid fa-box" },
+          { name: "MediaFire", url: "https://www.mediafire.com", icon: "fa-solid fa-file" },
+          { name: "MEGA", url: "https://mega.nz", icon: "fa-solid fa-cloud-arrow-up" },
+          { name: "PikPak", url: "https://mypikpak.com/", icon: "fa-solid fa-cloud" }
+        ]
+      },
+      {
+        id: "email",
+        title: "电子邮箱",
+        links: [
+          { name: "Zoho Mail企业邮箱", url: "https://www.zoho.com/mail/", icon: "fa-solid fa-envelope" },
+          { name: "Outlook", url: "https://outlook.live.com", icon: "fa-brands fa-microsoft" },
+          { name: "cock邮箱", url: "https://cock.li/", icon: "fa-solid fa-envelope-open" },
+          { name: "disroot邮箱", url: "https://disroot.org/", icon: "fa-solid fa-envelope-circle-check" },
+          { name: "ProtonMail", url: "https://www.protonmail.com", icon: "fa-solid fa-shield-halved" },
+          { name: "tinkmail企业邮箱", url: "https://tinkmail.me/", icon: "fa-brands fa-qq" },
+          { name: "Cloudflare临时邮件", url: "https://em.bjedu.tech/", icon: "fa-solid fa-at" },
+          { name: "临时教育邮箱", url: "https://edumail.su/", icon: "fa-solid fa-envelopes-bulk" }
+        ]
+      }
+    ];
+
+    function renderNavCards() {
+      var mainContainer = document.getElementById('main-content');
+      if (!mainContainer) return;
+      mainContainer.innerHTML = '';
+
+      navData.forEach(function (category) {
+        var section = document.createElement('section');
+        section.id = category.id;
+
+        var title = document.createElement('h2');
+        title.className = 'category-title';
+        title.innerHTML = category.title + ' <span class="category-count">' + category.links.length + '</span>';
+        section.appendChild(title);
+
+        var grid = document.createElement('div');
+        grid.className = 'link-grid';
+
+        category.links.forEach(function (link, idx) {
+          var card = document.createElement('div');
+          card.className = 'link-card';
+          card.style.animationDelay = (idx % 12) * 0.04 + 's';
+          card.innerHTML =
+            '<a href="' + link.url + '" target="_blank" rel="noopener noreferrer" aria-label="' + link.name + '"></a>' +
+            '<i class="' + link.icon + '"></i>' +
+            '<h3>' + link.name + '</h3>';
+          grid.appendChild(card);
+        });
+
+        section.appendChild(grid);
+        mainContainer.appendChild(section);
+      });
+    }
+
+    function initReveal() {
+      var observer = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('revealed');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.05, rootMargin: '0px 0px 60px 0px' });
+
+      document.querySelectorAll('.link-card').forEach(function (card) {
+        observer.observe(card);
+      });
+    }
+
+    function initSearch() {
+      var input = document.getElementById('search-input');
+      var noResults = document.getElementById('no-results');
+
+      input.addEventListener('input', function () {
+        var q = input.value.toLowerCase().trim();
+        var totalVisible = 0;
+
+        document.querySelectorAll('section').forEach(function (section) {
+          var sectionVisible = 0;
+          section.querySelectorAll('.link-card').forEach(function (card) {
+            var name = card.querySelector('h3').textContent.toLowerCase();
+            var visible = !q || name.indexOf(q) !== -1;
+            card.style.display = visible ? '' : 'none';
+            if (visible) {
+              if (!card.classList.contains('revealed')) {
+                card.classList.add('revealed');
+              }
+              sectionVisible++;
+              totalVisible++;
+            }
+          });
+          section.style.display = sectionVisible ? '' : 'none';
+        });
+
+        if (totalVisible === 0 && q.length > 0) {
+          noResults.classList.add('visible');
+        } else {
+          noResults.classList.remove('visible');
+        }
+      });
+    }
+
+    function initNav() {
+      var navLinks = document.querySelectorAll('#top-nav a');
+
+      navLinks.forEach(function (link) {
+        link.addEventListener('click', function (e) {
+          e.preventDefault();
+          navLinks.forEach(function (l) { l.classList.remove('active'); });
+          this.classList.add('active');
+          var targetId = this.getAttribute('href').split('#')[1];
+          var targetElement = document.getElementById(targetId);
+          if (targetElement) {
+            targetElement.scrollIntoView({ behavior: 'smooth' });
+            var newUrl = window.location.protocol + '//' + window.location.host + window.location.pathname + '#' + targetId;
+            window.history.pushState({ path: newUrl }, '', newUrl);
+          }
+        });
+      });
+
+      function handleHashChange() {
+        var hash = window.location.hash;
+        if (hash) {
+          var targetElement = document.getElementById(hash.substring(1));
+          if (targetElement) {
+            targetElement.scrollIntoView({ behavior: 'smooth' });
+            var activeLink = document.querySelector('#top-nav a[href="' + hash + '"]');
+            if (activeLink) {
+              navLinks.forEach(function (l) { l.classList.remove('active'); });
+              activeLink.classList.add('active');
+            }
+          }
+        }
+      }
+
+      window.addEventListener('hashchange', handleHashChange);
+      handleHashChange();
+    }
+
+    function initBackTop() {
+      var btn = document.getElementById('back-top');
+      window.addEventListener('scroll', function () {
+        if (window.scrollY > 400) {
+          btn.classList.add('visible');
+        } else {
+          btn.classList.remove('visible');
+        }
+      });
+      btn.addEventListener('click', function () {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+      renderNavCards();
+      initReveal();
+      initSearch();
+      initNav();
+      initBackTop();
+      document.getElementById('year').textContent = new Date().getFullYear();
+    });
+  </script>
+</body>
+
+</html>
