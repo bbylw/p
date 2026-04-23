@@ -49,7 +49,8 @@
 <main id="content" class="max-w-7xl mx-auto px-3 sm:px-4 lg:px-6 py-4"></main>
 
 <footer class="bg-black text-gray-400 text-center py-4 text-xs">
-  <p>&copy; 2025 WebNav Hub. 保留所有权利。</p>
+  <p>&copy; <span id="footer-year"></span> WebNav Hub. 保留所有权利。</p>
+    <script>document.getElementById('footer-year').textContent=new Date().getFullYear();</script>
   <nav class="mt-2">
     <a href="#" class="text-gray-400 mx-2 text-xs hover:text-primary transition-colors">隐私政策</a>
     <a href="#" class="text-gray-400 mx-2 text-xs hover:text-primary transition-colors">使用条款</a>
@@ -250,24 +251,57 @@ const DATA = [
   ]}
 ];
 
+function sanitizeURL(url) {
+  var s = String(url).trim();
+  if (/^https?:\/\//i.test(s)) return s;
+  return '';
+}
+function sanitizeClass(cls) {
+  return String(cls).replace(/[^a-zA-Z0-9\s\-_]/g, '');
+}
+function el(tag, classes, attrs) {
+  var e = document.createElement(tag);
+  if (classes) e.className = classes;
+  if (attrs) Object.keys(attrs).forEach(function(k){ e.setAttribute(k, attrs[k]); });
+  return e;
+}
+
 (function(){
   var nav = document.getElementById("nav-list");
   var main = document.getElementById("content");
+  var navFrag = document.createDocumentFragment();
+  var mainFrag = document.createDocumentFragment();
 
   DATA.forEach(function(cat){
-    nav.innerHTML += '<li><a href="#'+cat.id+'" class="text-white no-underline text-sm font-semibold font-display px-4 py-2 rounded-full hover:bg-primary hover:text-black inline-block">'+cat.title+'</a></li>';
+    var li = el('li');
+    var a = el('a', 'text-white no-underline text-sm font-semibold font-display px-4 py-2 rounded-full hover:bg-primary hover:text-black inline-block', {href: '#' + cat.id});
+    a.textContent = cat.title;
+    li.appendChild(a);
+    navFrag.appendChild(li);
 
-    var h = '<h2 class="font-display text-xl sm:text-2xl font-bold mt-8 mb-4 text-primary border-l-4 border-primary pl-3 uppercase tracking-tight" id="'+cat.id+'">'+cat.title+'</h2>';
-    h += '<section class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-7 xl:grid-cols-8 gap-2.5 sm:gap-3 mb-8">';
+    var h2 = el('h2', 'font-display text-xl sm:text-2xl font-bold mt-8 mb-4 text-primary border-l-4 border-primary pl-3 uppercase tracking-tight', {id: cat.id});
+    h2.textContent = cat.title;
+    mainFrag.appendChild(h2);
+
+    var section = el('section', 'grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-7 xl:grid-cols-8 gap-2.5 sm:gap-3 mb-8');
     cat.items.forEach(function(d){
-      h += '<div class="link-card bg-card rounded-xl p-2 sm:p-3 text-center flex flex-col items-center justify-center h-[96px] sm:h-[108px] relative overflow-hidden cursor-pointer hover:bg-card-hover">'
-        + '<a href="'+d[0]+'" target="_blank" class="absolute inset-0 z-20"></a>'
-        + '<i class="'+d[1]+' text-xl sm:text-2xl mb-1 text-primary relative z-10 shrink-0"></i>'
-        + '<h3 class="text-[11px] sm:text-xs font-medium text-white m-0 leading-[1.35] line-clamp-2 relative z-10 break-all">'+d[2]+'</h3></div>';
+      var card = el('div', 'link-card bg-card rounded-xl p-2 sm:p-3 text-center flex flex-col items-center justify-center h-[96px] sm:h-[108px] relative overflow-hidden cursor-pointer hover:bg-card-hover');
+      var link = el('a', 'absolute inset-0 z-20', {target: '_blank'});
+      var safeURL = sanitizeURL(d[0]);
+      if (safeURL) link.setAttribute('href', safeURL);
+      var icon = el('i', sanitizeClass(d[1]) + ' text-xl sm:text-2xl mb-1 text-primary relative z-10 shrink-0');
+      var title = el('h3', 'text-[11px] sm:text-xs font-medium text-white m-0 leading-[1.35] line-clamp-2 relative z-10 break-all');
+      title.textContent = d[2];
+      card.appendChild(link);
+      card.appendChild(icon);
+      card.appendChild(title);
+      section.appendChild(card);
     });
-    h += '</section>';
-    main.innerHTML += h;
+    mainFrag.appendChild(section);
   });
+
+  nav.appendChild(navFrag);
+  main.appendChild(mainFrag);
 
   var navLinks = nav.querySelectorAll("a");
   navLinks.forEach(function(link){
