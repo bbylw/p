@@ -330,7 +330,7 @@
       }
     }
   </style>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" />
   <script>
     document.addEventListener("DOMContentLoaded", function () {
       var navLinks = document.querySelectorAll("nav a");
@@ -481,7 +481,6 @@
         <a href="https://jules.google.com/" target="_blank"></a>
         <i class="fa-brands fa-google-plus"></i>
         <h3>jules.google</h3>
-      </div>
       </div>
       <div class="link-card">
         <a href="https://stitch.withgoogle.com/" target="_blank"></a>
@@ -643,12 +642,10 @@
         <i class="fa-solid fa-bolt"></i>
         <h3>讯飞星辰MaaS</h3>
       </div>
-      </div>
       <div class="link-card">
         <a href="https://youmind.com/" target="_blank"></a>
         <i class="fa-solid fa-camera"></i>
         <h3>youmind</h3>
-      </div>
       </div>
       <div class="link-card">
         <a href="https://www.lovart.ai/zh/home" target="_blank"></a>
@@ -1309,7 +1306,8 @@
     </section>
   </main>
   <footer>
-    <p>© 2025 WebNav Hub. 保留所有权利。</p>
+    <p>© <span id="year"></span> WebNav Hub. 保留所有权利。</p>
+        <script>document.getElementById('year').textContent=new Date().getFullYear();</script>
     <nav>
       <a href="#">隐私政策</a>
       <a href="#">使用条款</a>
