@@ -215,18 +215,6 @@
       border-left: 3px solid var(--accent);
       letter-spacing: 0.04em;
       text-transform: uppercase;
-      display: flex;
-      align-items: center;
-      gap: 0.6rem;
-    }
-
-    .category-count {
-      font-family: 'DM Mono', monospace;
-      font-size: 0.68rem;
-      color: var(--text-dim);
-      font-weight: 400;
-      letter-spacing: 0;
-      text-transform: none;
     }
 
     .link-grid {
@@ -783,7 +771,7 @@
 
         var title = document.createElement('h2');
         title.className = 'category-title';
-        title.innerHTML = category.title + ' <span class="category-count">' + category.links.length + '</span>';
+        title.textContent = category.title;
         section.appendChild(title);
 
         var grid = document.createElement('div');
