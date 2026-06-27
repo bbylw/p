@@ -1,0 +1,27 @@
+name: Deploy to Surge
+
+on:
+  push:
+    branches:
+      - main # 触发部署的分支名称
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. 拉取仓库代码
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # 2. 安装 Node.js
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      # 3. 安装 Surge 并执行部署
+      - name: Deploy to Surge
+        run: |
+          npm install -g surge
+          surge . pnav.surge.sh --token ${{ secrets.SURGE_TOKEN }} --login ${{ secrets.SURGE_LOGIN }}
