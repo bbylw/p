@@ -24,4 +24,4 @@ jobs:
       - name: Deploy to Surge
         run: |
           npm install -g surge
-          surge . pnav.surge.sh --token ${{ secrets.SURGE_TOKEN }} --login ${{ secrets.SURGE_LOGIN }}
+          surge . pnav.surge.sh --token ${{ secrets.SURGE_TOKEN }}
