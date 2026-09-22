@@ -1,85 +1,69 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="100%" height="100%">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
   <defs>
     <!-- Background Gradient -->
     <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#14151f" />
-      <stop offset="100%" stop-color="#08080c" />
+      <stop offset="0%" stop-color="#1d2030" />
+      <stop offset="100%" stop-color="#0a0a12" />
     </linearGradient>
 
     <!-- Border Gradient -->
     <linearGradient id="borderGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#ff9d42" stop-opacity="0.9" />
-      <stop offset="50%" stop-color="#ff4b72" stop-opacity="0.6" />
-      <stop offset="100%" stop-color="#38bdf8" stop-opacity="0.8" />
+      <stop offset="0%" stop-color="#ffb057" />
+      <stop offset="100%" stop-color="#38bdf8" />
     </linearGradient>
 
     <!-- Needle North Facet Left -->
-    <linearGradient id="needleLeft" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#ffe082" />
-      <stop offset="40%" stop-color="#ff8c38" />
+    <linearGradient id="needleNorthLeft" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffca6e" />
+      <stop offset="55%" stop-color="#ff8c38" />
       <stop offset="100%" stop-color="#f43f5e" />
     </linearGradient>
 
     <!-- Needle North Facet Right -->
-    <linearGradient id="needleRight" x1="0%" y1="0%" x2="100%" y2="100%">
+    <linearGradient id="needleNorthRight" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" stop-color="#ffffff" />
-      <stop offset="35%" stop-color="#ffbe76" />
-      <stop offset="100%" stop-color="#ff5722" />
+      <stop offset="40%" stop-color="#ffc178" />
+      <stop offset="100%" stop-color="#ff6b2b" />
     </linearGradient>
 
     <!-- Needle South Facet Left -->
     <linearGradient id="needleSouthLeft" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#312e81" />
-      <stop offset="100%" stop-color="#1e1b4b" />
+      <stop offset="0%" stop-color="#4cc3f7" />
+      <stop offset="100%" stop-color="#0b7cc4" />
     </linearGradient>
 
     <!-- Needle South Facet Right -->
     <linearGradient id="needleSouthRight" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#4f46e5" />
-      <stop offset="100%" stop-color="#3730a3" />
+      <stop offset="0%" stop-color="#d6f0ff" />
+      <stop offset="100%" stop-color="#5cc8fb" />
     </linearGradient>
 
-    <!-- Center Core Glow -->
-    <radialGradient id="coreGlow" cx="50%" cy="50%" r="50%">
-      <stop offset="0%" stop-color="#ff8c38" stop-opacity="0.45" />
-      <stop offset="45%" stop-color="#ff4b72" stop-opacity="0.2" />
+    <!-- Ambient Glow Behind Needle -->
+    <radialGradient id="glow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#ff8c38" stop-opacity="0.22" />
+      <stop offset="55%" stop-color="#ff4b72" stop-opacity="0.08" />
       <stop offset="100%" stop-color="#000000" stop-opacity="0" />
     </radialGradient>
-
-    <!-- Drop Shadow Filter for central needle -->
-    <filter id="shadow" x="-25%" y="-25%" width="150%" height="150%">
-      <feDropShadow dx="0" dy="3" stdDeviation="5" flood-color="#000000" flood-opacity="0.75" />
-      <feDropShadow dx="0" dy="0" stdDeviation="6" flood-color="#ff7a18" flood-opacity="0.4" />
-    </filter>
   </defs>
 
   <!-- Base Squircle -->
-  <rect x="5" y="5" width="118" height="118" rx="28" fill="url(#bgGrad)" stroke="url(#borderGrad)" stroke-width="3.5" />
+  <rect x="4" y="4" width="120" height="120" rx="30" fill="url(#bgGrad)" stroke="url(#borderGrad)" stroke-width="5" />
 
-  <!-- Subtle Radial Ambient Glow -->
-  <circle cx="64" cy="64" r="46" fill="url(#coreGlow)" />
+  <!-- Ambient Glow -->
+  <circle cx="64" cy="64" r="46" fill="url(#glow)" />
 
-  <!-- Orbital Ring (Rotated for dynamic motion) -->
-  <ellipse cx="64" cy="64" rx="42" ry="18" fill="none" stroke="url(#borderGrad)" stroke-width="2.2" stroke-dasharray="7 5" opacity="0.6" transform="rotate(-30 64 64)" />
+  <!-- Compass Needle -->
+  <g transform="rotate(45 64 64)">
+    <!-- South-Left -->
+    <path d="M64 64 L38 64 L64 112 Z" fill="url(#needleSouthLeft)" />
+    <!-- South-Right -->
+    <path d="M64 64 L90 64 L64 112 Z" fill="url(#needleSouthRight)" />
+    <!-- North-Left -->
+    <path d="M64 64 L38 64 L64 14 Z" fill="url(#needleNorthLeft)" />
+    <!-- North-Right -->
+    <path d="M64 64 L90 64 L64 14 Z" fill="url(#needleNorthRight)" />
 
-  <!-- Compass / Navigation Star Needle (Rotated 42 degrees towards northeast) -->
-  <g transform="rotate(42 64 64)" filter="url(#shadow)">
-    <!-- South-Left (Deep violet shaded) -->
-    <path d="M64 64 L49 64 L64 104 Z" fill="url(#needleSouthLeft)" />
-    <!-- South-Right (Indigo lit) -->
-    <path d="M64 64 L79 64 L64 104 Z" fill="url(#needleSouthRight)" />
-    <!-- North-Left (Vibrant amber/coral) -->
-    <path d="M64 64 L49 64 L64 20 Z" fill="url(#needleLeft)" />
-    <!-- North-Right (Bright gold/white highlight) -->
-    <path d="M64 64 L79 64 L64 20 Z" fill="url(#needleRight)" />
-
-    <!-- Central Core Pivot Point -->
-    <circle cx="64" cy="64" r="5" fill="#ffffff" stroke="#ff8c38" stroke-width="2.5" />
-  </g>
-
-  <!-- Cardinal Sparkle Flare -->
-  <g transform="translate(95, 26)">
-    <circle cx="0" cy="0" r="2.5" fill="#ffffff" opacity="0.95" />
-    <path d="M0 -6 L0 6 M-6 0 L6 0" stroke="#ffffff" stroke-width="1.2" stroke-linecap="round" opacity="0.8" />
+    <!-- Center Pivot -->
+    <circle cx="64" cy="64" r="6" fill="#ffffff" stroke="#0a0a12" stroke-width="2.5" />
   </g>
 </svg>
