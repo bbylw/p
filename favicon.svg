@@ -1,108 +1,110 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
   <defs>
-    <!-- Deep-space background with off-center key light -->
-    <radialGradient id="bg" cx="30%" cy="22%" r="95%">
-      <stop offset="0%" stop-color="#262b4d" />
-      <stop offset="55%" stop-color="#131630" />
-      <stop offset="100%" stop-color="#06070f" />
+    <!-- Continuous-curvature squircle, inset 4 from the canvas -->
+    <path id="squircle"
+      d="M34 4H94C114.4 4 124 13.6 124 34V94C124 114.4 114.4 124 94 124H34C13.6 124 4 114.4 4 94V34C4 13.6 13.6 4 34 4Z" />
+    <clipPath id="frame">
+      <path d="M34 4H94C114.4 4 124 13.6 124 34V94C124 114.4 114.4 124 94 124H34C13.6 124 4 114.4 4 94V34C4 13.6 13.6 4 34 4Z" />
+    </clipPath>
+
+    <!-- Night sky, key light from the upper left -->
+    <radialGradient id="sky" cx="32%" cy="20%" r="100%">
+      <stop offset="0" stop-color="#252c55" />
+      <stop offset="52%" stop-color="#12152e" />
+      <stop offset="100%" stop-color="#05060d" />
     </radialGradient>
 
-    <!-- Aurora blooms: warm top-left, cool bottom-right -->
-    <radialGradient id="auroraWarm" cx="50%" cy="50%" r="50%">
-      <stop offset="0%" stop-color="#ff8a3d" stop-opacity="0.5" />
-      <stop offset="60%" stop-color="#ff4b72" stop-opacity="0.14" />
-      <stop offset="100%" stop-color="#ff4b72" stop-opacity="0" />
+    <!-- Ambient light: warm upper left, cool lower right -->
+    <radialGradient id="warmGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0" stop-color="#ff9a45" stop-opacity="0.46" />
+      <stop offset="55%" stop-color="#ff4d73" stop-opacity="0.14" />
+      <stop offset="100%" stop-color="#ff4d73" stop-opacity="0" />
     </radialGradient>
-    <radialGradient id="auroraCool" cx="50%" cy="50%" r="50%">
-      <stop offset="0%" stop-color="#22d3ee" stop-opacity="0.42" />
-      <stop offset="60%" stop-color="#3b82f6" stop-opacity="0.14" />
+    <radialGradient id="coolGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0" stop-color="#2ad6f2" stop-opacity="0.4" />
+      <stop offset="55%" stop-color="#3b82f6" stop-opacity="0.12" />
       <stop offset="100%" stop-color="#3b82f6" stop-opacity="0" />
     </radialGradient>
 
-    <!-- Metallic squircle edge: warm to cool -->
-    <linearGradient id="edge" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#ffb457" />
-      <stop offset="50%" stop-color="#e8608a" />
-      <stop offset="100%" stop-color="#38bdf8" />
+    <!-- Metal edge ring, warm around to cool -->
+    <linearGradient id="edge" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#ffd28a" />
+      <stop offset="45%" stop-color="#f4798f" />
+      <stop offset="100%" stop-color="#4ec9f2" />
     </linearGradient>
 
-    <!-- Glass rim light: lit from top, fading down -->
-    <linearGradient id="rim" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.5" />
-      <stop offset="35%" stop-color="#ffffff" stop-opacity="0.06" />
-      <stop offset="100%" stop-color="#ffffff" stop-opacity="0" />
+    <!-- Glass rims: white from above, cyan bounce from the lower right -->
+    <linearGradient id="rimTop" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fff" stop-opacity="0.5" />
+      <stop offset="38%" stop-color="#fff" stop-opacity="0.06" />
+      <stop offset="100%" stop-color="#fff" stop-opacity="0" />
+    </linearGradient>
+    <linearGradient id="rimBottom" x1="1" y1="1" x2="0.5" y2="0.5">
+      <stop offset="0" stop-color="#9ceaff" stop-opacity="0.32" />
+      <stop offset="100%" stop-color="#9ceaff" stop-opacity="0" />
     </linearGradient>
 
-    <!-- Navigation arrow: sunset metallic -->
-    <linearGradient id="arrow" x1="0%" y1="0%" x2="20%" y2="100%">
-      <stop offset="0%" stop-color="#ffe1a0" />
-      <stop offset="40%" stop-color="#ff9a4d" />
-      <stop offset="100%" stop-color="#f43f5e" />
+    <!-- Blade: sunlit gold at the tip, cooling to rose at the tail -->
+    <linearGradient id="blade" x1="15%" y1="0" x2="80%" y2="100%">
+      <stop offset="0" stop-color="#fff3d6" />
+      <stop offset="28%" stop-color="#ffbb5e" />
+      <stop offset="62%" stop-color="#f96a63" />
+      <stop offset="100%" stop-color="#dd3560" />
     </linearGradient>
 
-    <!-- Motion trail -->
-    <linearGradient id="trail" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" stop-color="#7de3fb" />
-      <stop offset="100%" stop-color="#22d3ee" stop-opacity="0.15" />
+    <!-- Wake streaks, fading out behind the tail -->
+    <linearGradient id="wake" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffd2a8" stop-opacity="0.7" />
+      <stop offset="100%" stop-color="#ff8a4d" stop-opacity="0" />
     </linearGradient>
 
-    <!-- Film grain -->
-    <filter id="grain" x="0%" y="0%" width="100%" height="100%">
-      <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" stitchTiles="stitch" />
-      <feColorMatrix type="matrix" values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.05 0" />
+    <filter id="glow" x="-70%" y="-70%" width="240%" height="240%">
+      <feGaussianBlur stdDeviation="5.5" />
     </filter>
-
-    <!-- Soft bloom for the arrow -->
-    <filter id="bloom" x="-60%" y="-60%" width="220%" height="220%">
-      <feGaussianBlur stdDeviation="6" />
+    <filter id="cast" x="-60%" y="-60%" width="220%" height="220%">
+      <feGaussianBlur stdDeviation="3" />
     </filter>
-
-    <!-- Ground shadow under the arrow -->
-    <filter id="softShadow" x="-60%" y="-60%" width="220%" height="220%">
-      <feGaussianBlur stdDeviation="4.5" />
-    </filter>
-
-    <clipPath id="squircle">
-      <rect x="4" y="4" width="120" height="120" rx="30" />
-    </clipPath>
   </defs>
 
-  <!-- Base -->
-  <rect x="4" y="4" width="120" height="120" rx="30" fill="url(#bg)" stroke="url(#edge)" stroke-width="4" />
+  <!-- Base plate -->
+  <use href="#squircle" fill="url(#sky)" stroke="url(#edge)" stroke-width="4" />
 
-  <!-- Aurora atmosphere -->
-  <g clip-path="url(#squircle)">
-    <ellipse cx="30" cy="26" rx="44" ry="38" fill="url(#auroraWarm)" />
-    <ellipse cx="100" cy="106" rx="48" ry="40" fill="url(#auroraCool)" />
-    <rect x="4" y="4" width="120" height="120" filter="url(#grain)" />
+  <g clip-path="url(#frame)">
+    <!-- Atmosphere -->
+    <ellipse cx="28" cy="24" rx="46" ry="40" fill="url(#warmGlow)" />
+    <ellipse cx="104" cy="108" rx="50" ry="42" fill="url(#coolGlow)" />
+
+    <!-- Glass rims -->
+    <use href="#squircle" fill="none" stroke="url(#rimTop)" stroke-width="2.4" />
+    <use href="#squircle" fill="none" stroke="url(#rimBottom)" stroke-width="2.4" />
+
+    <g transform="rotate(45 64 64)">
+      <!-- Light spill -->
+      <path d="M64 21L92 97 64 81 36 97Z" fill="#ff8f45" filter="url(#glow)" opacity="0.45" />
+
+      <!-- Cast shadow, thrown away from the key light -->
+      <g transform="translate(4.5 0)">
+        <path d="M64 21L92 97 64 81 36 97Z" fill="#04050e" stroke="#04050e" stroke-width="6.5"
+          stroke-linejoin="round" filter="url(#cast)" opacity="0.5" />
+      </g>
+
+      <!-- Wake, tucked under the tail -->
+      <path d="M50 109.5 64 100 78 109.5" fill="none" stroke="url(#wake)" stroke-width="5.5"
+        stroke-linecap="round" stroke-linejoin="round" />
+      <path d="M57 119 64 113 71 119" fill="none" stroke="url(#wake)" stroke-width="5"
+        stroke-linecap="round" stroke-linejoin="round" opacity="0.75" />
+
+      <!-- Kite blade -->
+      <path d="M64 21L92 97 64 81 36 97Z" fill="url(#blade)" stroke="url(#blade)" stroke-width="6.5"
+        stroke-linejoin="round" />
+
+      <!-- Specular on the lit edge, cyan bounce on the shadow edge -->
+      <path d="M61.4 34 47 72" stroke="#fff" stroke-width="2.4" stroke-linecap="round" opacity="0.5" />
+      <path d="M68.8 38 84.6 82" stroke="#d8f3ff" stroke-width="2" stroke-linecap="round" opacity="0.26" />
+    </g>
   </g>
 
-  <!-- Arrow bloom (light spill) -->
-  <g transform="rotate(45 64 64)" filter="url(#bloom)" opacity="0.5">
-    <path d="M64 26 L90 96 L64 80 L38 96 Z" fill="#ff8a3d" />
-  </g>
-
-  <!-- Arrow ground shadow -->
-  <g transform="rotate(45 64 64)" filter="url(#softShadow)" opacity="0.55">
-    <path d="M64 32 L92 100 L64 85 L36 100 Z" fill="#000000" />
-  </g>
-
-  <!-- Navigation arrow: rounded kite, pointing NE -->
-  <g transform="rotate(45 64 64)">
-    <!-- Motion trail: two chevrons falling away behind the tail -->
-    <path d="M54 100 L64 93 L74 100" fill="none" stroke="url(#trail)" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" />
-    <path d="M58 111 L64 107 L70 111" fill="none" stroke="url(#trail)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
-
-    <path d="M64 24 L90 96 L64 80 L38 96 Z" fill="url(#arrow)" stroke="url(#arrow)" stroke-width="7" stroke-linejoin="round" />
-
-    <!-- Specular edge on the lit side -->
-    <path d="M67 34 L82 78" stroke="#ffffff" stroke-width="2.6" stroke-linecap="round" opacity="0.55" />
-  </g>
-
-  <!-- Sparkle accents (large sizes only; vanish naturally when scaled down) -->
-  <path d="M100 22 L101.8 28.2 L108 30 L101.8 31.8 L100 38 L98.2 31.8 L92 30 L98.2 28.2 Z" fill="#ffffff" opacity="0.95" />
-  <circle cx="27" cy="98" r="1.8" fill="#ffffff" opacity="0.7" />
-
-  <!-- Glass rim light -->
-  <rect x="6.5" y="6.5" width="115" height="115" rx="27.5" fill="none" stroke="url(#rim)" stroke-width="2" />
+  <!-- Sparkle: the point of light the blade is aiming at -->
+  <path d="M104 13Q105.4 21.6 114 23 105.4 24.4 104 33 102.6 24.4 94 23 102.6 21.6 104 13Z"
+    fill="#fff" opacity="0.9" />
 </svg>
