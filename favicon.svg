@@ -1,69 +1,108 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
   <defs>
-    <!-- Background Gradient -->
-    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#1d2030" />
-      <stop offset="100%" stop-color="#0a0a12" />
-    </linearGradient>
+    <!-- Deep-space background with off-center key light -->
+    <radialGradient id="bg" cx="30%" cy="22%" r="95%">
+      <stop offset="0%" stop-color="#262b4d" />
+      <stop offset="55%" stop-color="#131630" />
+      <stop offset="100%" stop-color="#06070f" />
+    </radialGradient>
 
-    <!-- Border Gradient -->
-    <linearGradient id="borderGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#ffb057" />
+    <!-- Aurora blooms: warm top-left, cool bottom-right -->
+    <radialGradient id="auroraWarm" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#ff8a3d" stop-opacity="0.5" />
+      <stop offset="60%" stop-color="#ff4b72" stop-opacity="0.14" />
+      <stop offset="100%" stop-color="#ff4b72" stop-opacity="0" />
+    </radialGradient>
+    <radialGradient id="auroraCool" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#22d3ee" stop-opacity="0.42" />
+      <stop offset="60%" stop-color="#3b82f6" stop-opacity="0.14" />
+      <stop offset="100%" stop-color="#3b82f6" stop-opacity="0" />
+    </radialGradient>
+
+    <!-- Metallic squircle edge: warm to cool -->
+    <linearGradient id="edge" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffb457" />
+      <stop offset="50%" stop-color="#e8608a" />
       <stop offset="100%" stop-color="#38bdf8" />
     </linearGradient>
 
-    <!-- Needle North Facet Left -->
-    <linearGradient id="needleNorthLeft" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#ffca6e" />
-      <stop offset="55%" stop-color="#ff8c38" />
+    <!-- Glass rim light: lit from top, fading down -->
+    <linearGradient id="rim" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.5" />
+      <stop offset="35%" stop-color="#ffffff" stop-opacity="0.06" />
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0" />
+    </linearGradient>
+
+    <!-- Navigation arrow: sunset metallic -->
+    <linearGradient id="arrow" x1="0%" y1="0%" x2="20%" y2="100%">
+      <stop offset="0%" stop-color="#ffe1a0" />
+      <stop offset="40%" stop-color="#ff9a4d" />
       <stop offset="100%" stop-color="#f43f5e" />
     </linearGradient>
 
-    <!-- Needle North Facet Right -->
-    <linearGradient id="needleNorthRight" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#ffffff" />
-      <stop offset="40%" stop-color="#ffc178" />
-      <stop offset="100%" stop-color="#ff6b2b" />
+    <!-- Motion trail -->
+    <linearGradient id="trail" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#7de3fb" />
+      <stop offset="100%" stop-color="#22d3ee" stop-opacity="0.15" />
     </linearGradient>
 
-    <!-- Needle South Facet Left -->
-    <linearGradient id="needleSouthLeft" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#4cc3f7" />
-      <stop offset="100%" stop-color="#0b7cc4" />
-    </linearGradient>
+    <!-- Film grain -->
+    <filter id="grain" x="0%" y="0%" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" stitchTiles="stitch" />
+      <feColorMatrix type="matrix" values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.05 0" />
+    </filter>
 
-    <!-- Needle South Facet Right -->
-    <linearGradient id="needleSouthRight" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#d6f0ff" />
-      <stop offset="100%" stop-color="#5cc8fb" />
-    </linearGradient>
+    <!-- Soft bloom for the arrow -->
+    <filter id="bloom" x="-60%" y="-60%" width="220%" height="220%">
+      <feGaussianBlur stdDeviation="6" />
+    </filter>
 
-    <!-- Ambient Glow Behind Needle -->
-    <radialGradient id="glow" cx="50%" cy="50%" r="50%">
-      <stop offset="0%" stop-color="#ff8c38" stop-opacity="0.22" />
-      <stop offset="55%" stop-color="#ff4b72" stop-opacity="0.08" />
-      <stop offset="100%" stop-color="#000000" stop-opacity="0" />
-    </radialGradient>
+    <!-- Ground shadow under the arrow -->
+    <filter id="softShadow" x="-60%" y="-60%" width="220%" height="220%">
+      <feGaussianBlur stdDeviation="4.5" />
+    </filter>
+
+    <clipPath id="squircle">
+      <rect x="4" y="4" width="120" height="120" rx="30" />
+    </clipPath>
   </defs>
 
-  <!-- Base Squircle -->
-  <rect x="4" y="4" width="120" height="120" rx="30" fill="url(#bgGrad)" stroke="url(#borderGrad)" stroke-width="5" />
+  <!-- Base -->
+  <rect x="4" y="4" width="120" height="120" rx="30" fill="url(#bg)" stroke="url(#edge)" stroke-width="4" />
 
-  <!-- Ambient Glow -->
-  <circle cx="64" cy="64" r="46" fill="url(#glow)" />
-
-  <!-- Compass Needle -->
-  <g transform="rotate(45 64 64)">
-    <!-- South-Left -->
-    <path d="M64 64 L38 64 L64 112 Z" fill="url(#needleSouthLeft)" />
-    <!-- South-Right -->
-    <path d="M64 64 L90 64 L64 112 Z" fill="url(#needleSouthRight)" />
-    <!-- North-Left -->
-    <path d="M64 64 L38 64 L64 14 Z" fill="url(#needleNorthLeft)" />
-    <!-- North-Right -->
-    <path d="M64 64 L90 64 L64 14 Z" fill="url(#needleNorthRight)" />
-
-    <!-- Center Pivot -->
-    <circle cx="64" cy="64" r="6" fill="#ffffff" stroke="#0a0a12" stroke-width="2.5" />
+  <!-- Aurora atmosphere -->
+  <g clip-path="url(#squircle)">
+    <ellipse cx="30" cy="26" rx="44" ry="38" fill="url(#auroraWarm)" />
+    <ellipse cx="100" cy="106" rx="48" ry="40" fill="url(#auroraCool)" />
+    <rect x="4" y="4" width="120" height="120" filter="url(#grain)" />
   </g>
+
+  <!-- Arrow bloom (light spill) -->
+  <g transform="rotate(45 64 64)" filter="url(#bloom)" opacity="0.5">
+    <path d="M64 26 L90 96 L64 80 L38 96 Z" fill="#ff8a3d" />
+  </g>
+
+  <!-- Arrow ground shadow -->
+  <g transform="rotate(45 64 64)" filter="url(#softShadow)" opacity="0.55">
+    <path d="M64 32 L92 100 L64 85 L36 100 Z" fill="#000000" />
+  </g>
+
+  <!-- Navigation arrow: rounded kite, pointing NE -->
+  <g transform="rotate(45 64 64)">
+    <!-- Motion trail: two chevrons falling away behind the tail -->
+    <path d="M54 100 L64 93 L74 100" fill="none" stroke="url(#trail)" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" />
+    <path d="M58 111 L64 107 L70 111" fill="none" stroke="url(#trail)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+
+    <path d="M64 24 L90 96 L64 80 L38 96 Z" fill="url(#arrow)" stroke="url(#arrow)" stroke-width="7" stroke-linejoin="round" />
+
+    <!-- Specular edge on the lit side -->
+    <path d="M67 34 L82 78" stroke="#ffffff" stroke-width="2.6" stroke-linecap="round" opacity="0.55" />
+  </g>
+
+  <!-- Sparkle accents (large sizes only; vanish naturally when scaled down) -->
+  <path d="M100 22 L101.8 28.2 L108 30 L101.8 31.8 L100 38 L98.2 31.8 L92 30 L98.2 28.2 Z" fill="#ffffff" opacity="0.95" />
+  <circle cx="27" cy="98" r="1.8" fill="#ffffff" opacity="0.7" />
+
+  <!-- Glass rim light -->
+  <rect x="6.5" y="6.5" width="115" height="115" rx="27.5" fill="none" stroke="url(#rim)" stroke-width="2" />
 </svg>
